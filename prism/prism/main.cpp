@@ -1,11 +1,14 @@
 #include "include/.prism_reader/.prism_reader.hpp"
 
-int main() {
-	std::string filepath = "D:/VSProjects/prism/prism/examples/01_the_basics.prism";
-//	std::cin >> filepath;
+int main(int argc, char* argv[]) {
+	int filecount = 1;
+	std::string filepath = argv[1];
 
-	prism::PrismReader reader(filepath);
-	if (!reader.is_open()) return 1;
+	for (int i = 1; i <= filecount; i++) {
+		prism::PrismReader reader(filepath);
+		if (!reader.is_open()) return 1;
 
-	std::string_view code = reader.get();
+		reader.dump();
+		std::string_view code = reader.get();
+	}
 }

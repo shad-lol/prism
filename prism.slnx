@@ -3,5 +3,5 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
-  <Project Path="prism/prism.vcxproj" />
+  <Project Path="prism/prism.vcxproj" Id="f92c783d-8c47-4613-9ad0-b208cc9ea467" />
 </Solution>

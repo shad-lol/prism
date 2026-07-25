@@ -21,13 +21,42 @@
     <ClCompile Include="prism\src\.prism_reader\.prism_reader.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="LICENSE">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="prism\src\lexer\lexer.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="prism\src\lexer\arg_reader.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="prism\src\error_handler\error_handler.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="prism\src\logger\logger.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="prism\include\.prism_reader\.prism_reader.hpp">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="prism\include\lexer\lexer.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="prism\include\lexer\arg_reader.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="prism\include\error_handler\error_handler.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="prism\include\logger\logger.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="examples\01_the_basics.prism" />
+    <None Include="README.md" />
+    <None Include="examples\02_alt_and_if.prism" />
   </ItemGroup>
 </Project>

@@ -1,0 +1,9 @@
+entry main() {
+	alt answer 42; // now everywhere in this scope the word answer means 42 (note this is NOT variable declaration, instead this is a macro)
+
+	if (answer == 42) {
+		return 0; // no errors
+	} else {
+		return 1; // error
+	}
+}
