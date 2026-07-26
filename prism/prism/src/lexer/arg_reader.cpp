@@ -1,3 +1,4 @@
+#include <filesystem>
 #include <algorithm>
 
 #include "include/lexer/arg_reader.hpp"
@@ -20,6 +21,35 @@ prism::ArgReader::ArgReader(int argc, char* argv[]) {
 			i++;
 		}
 	}
+
+	for (int i = 0; i < arguements.size(); i++) {
+		if (arguements[i].starts_with("-") && !arguements[i].starts_with("--")) {
+
+		}
+
+		else if (arguements[i].starts_with("--")) {
+			if (arguements[i] == "--prism-dump") {
+				compileconfig.dump_prism = true;
+			}
+		}
+
+		else if (!arguements[i].starts_with("-") && !arguements[i].starts_with("--")) {
+			ErrorHandler errorhandler;
+
+			if (std::filesystem::is_directory(arguements[i])) {
+				errno = EISDIR;
+			}
+
+			if (errno == EISDIR) {
+				errorhandler.log(ERROR_IS_A_DIRECTORY, arguements[i]);
+			}
+			else if (!arguements[i].ends_with(".prism")) {
+				errorhandler.log(ERROR_NOT_DOT_PRISM, arguements[i]);
+			} else {
+				errorhandler.log(err::ERROR_INVALID_COMMAND, arguements[i]);
+			}
+		}
+	}
 }
 
 size_t prism::ArgReader::filecount() {
@@ -30,26 +60,12 @@ size_t prism::ArgReader::filecount() {
 	return files.size();
 }
 
-void prism::ArgReader::process() {
-	for (int i = 0; i < arguements.size(); i++) {
-		if (arguements[i].starts_with("-") && !arguements[i].starts_with("--")) {
-			
-		}
-		
-		else if (arguements[i].starts_with("--")) {
-			if (arguements[i] == "--output") {
-
-			}
-			else if (arguements[i] == "--prism-dump") {
-				enable(flags::prism_dump);
-			}
-		}
-		
-		else {
-			prism::ErrorHandler errorhandler;
-			prism::Logger logger;
-			errorhandler.log(err::ERROR_INVALID_COMMAND);
-			logger.cerrrgb("[234, 222, 0]" + arguements[i]);
-		}
+prism::ArgReader::ConfigValue prism::ArgReader::getconfig_wrapper(ConfigId id) const {
+	switch (id) {
+		case ConfigId::DumpPrism: return compileconfig.dump_prism;
+		default:
+			ErrorHandler errorhandler;
+			errorhandler.log(err::ERROR_INVALID_CONFIG_ID);
+			return ConfigValue{};
 	}
 }

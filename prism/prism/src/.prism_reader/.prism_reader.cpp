@@ -3,32 +3,21 @@
 #include <filesystem>
 
 #include "include/.prism_reader/.prism_reader.hpp"
-#include "include/error_handler/error_handler.hpp"
 #include "include/logger/logger.hpp"
+#include "include/error_handler/error_handler.hpp"
 
 prism::PrismReader::PrismReader(std::string filepath) {
+	this->filepath = filepath;
 	ifstream_code.open(filepath);
 	if (!ifstream_code.is_open()) {
-		prism::ErrorHandler errorhandler;
-		prism::Logger logger;
+		ErrorHandler errorhandler;
 
-		if (std::filesystem::is_directory(filepath)) {
-			errno = EISDIR;
-		}
-
-		if (errno == EISDIR) {
-			errorhandler.log(ERROR_IS_A_DIRECTORY);
-			logger.cerrrgb("[234, 222, 0]" + filepath);
-		} else if (!filepath.ends_with(".prism")) {
-			errorhandler.log(ERROR_NOT_DOT_PRISM);
-			logger.cerrrgb("[234, 222, 0]" + filepath);
-		} else if (errno == ENOENT) {
-			errorhandler.log(ERROR_FILE_NOT_FOUND);
+		if (errno == ENOENT) {
+			errorhandler.log(ERROR_FILE_NOT_FOUND, filepath);
 		} else if (errno == EACCES) {
-			errorhandler.log(ERROR_PERMISSION_DENIED);
+			errorhandler.log(ERROR_PERMISSION_DENIED, filepath);
 		} else {
-			errorhandler.log(UKNOWN_FILE_ERROR);
-			logger.cerrrgb("[234, 222, 0] " + filepath);
+			errorhandler.log(UKNOWN_FILE_ERROR, filepath);
 		}
 	}
 	ostringstream_code << ifstream_code.rdbuf();
@@ -46,7 +35,9 @@ std::string_view prism::PrismReader::get() {
 }
 
 void prism::PrismReader::dump() {
-	std::cout << string_code << std::endl;
+	Logger logger;
+	logger.coutrgb("[234, 222, 0]" + filepath + ":[]\n");
+	std::cout << string_code << "\n\n\n";
 }
 
 bool prism::PrismReader::is_open() {

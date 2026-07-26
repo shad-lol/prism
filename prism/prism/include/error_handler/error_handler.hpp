@@ -3,51 +3,66 @@
 #include <string>
 #include <cstdint>
 #include <unordered_map>
-
-#include "include/logger/logger.hpp"
+#include <vector>
+#include <sstream>
 
 namespace prism {
-
 	enum err : uint32_t {
-		SUCCESS =                 0x10000000,
-		INFO =                    0x90000000,
-		WARNING =                 0xA0000000,
-		ERROR =                   0xE0000000,
-		FATAL =	                  0xF0000000,
+		SUCCESS = 0x10000000,
+		INFO = 0x90000000,
+		WARNING = 0xA0000000,
+		ERROR = 0xE0000000,
+		FATAL = 0xF0000000,
 
-		ERROR_NO_ARGUEMENTS =     0xE0000000,
-		ERROR_INVALID_COMMAND =   0xE0000001,
+		ERROR_NO_ARGUEMENTS = 0xE0000000,
+		ERROR_INVALID_COMMAND = 0xE0000001,
+		ERROR_INVALID_CONFIG_ID = 0xE0000002,
 
-		ERROR_FILE_NOT_FOUND =    0xE0000100,
+		ERROR_FILE_NOT_FOUND = 0xE0000100,
 		ERROR_PERMISSION_DENIED = 0xE0000101,
-		ERROR_IS_A_DIRECTORY =    0xE0000102,
-		ERROR_NOT_DOT_PRISM =     0xE0000103,
-		UKNOWN_FILE_ERROR =       0xE0000104,
-		ALERT_MULTIPLE_FILES =     0xA0000105,
+		ERROR_IS_A_DIRECTORY = 0xE0000102,
+		ERROR_NOT_DOT_PRISM = 0xE0000103,
+		UKNOWN_FILE_ERROR = 0xE0000104,
+		ALERT_MULTIPLE_FILES = 0xA0000105,
 	};
 
 	class ErrorHandler {
 	private:
 		std::unordered_map<uint32_t, std::string> ERROR_MAP{
-			{err::SUCCESS, "[40, 167, 69]success.\n"},
-			{err::INFO, "[33, 150, 243]info.\n"},
-			{err::WARNING, "[255, 152, 0]warning.\n"},
-			{err::ERROR, "[220, 53, 69]error.\n"},
-			{err::FATAL, "[139, 0, 0]fatal error.\n"},
+			{err::SUCCESS, "success"},
+			{err::INFO, "info"},
+			{err::WARNING, "warning"},
+			{err::ERROR, "error"},
+			{err::FATAL, "fatal error"},
 
-			{err::ERROR_NO_ARGUEMENTS, "[240, 240, 240]No arguements.\n"},
-			{err::ERROR_INVALID_COMMAND, "[240, 240, 240]Invalid command: \n"},
+			{err::ERROR_NO_ARGUEMENTS, "No arguments"},
+			{err::ERROR_INVALID_COMMAND, "$cmd is an invalid command"},
+			{err::ERROR_INVALID_CONFIG_ID, "Invalid config id: $id"},
 
-			{err::ERROR_FILE_NOT_FOUND, "[240, 240, 240]File not found.\n"},
-			{err::ERROR_PERMISSION_DENIED, "[240, 240, 240]Permission to file denied.\n"},
-			{err::ERROR_IS_A_DIRECTORY, "[240, 240, 240].This is a directory: "},
-			{err::ERROR_NOT_DOT_PRISM, "[240, 240, 240]The file is not a .prism file: "},
-			{err::UKNOWN_FILE_ERROR, "[240, 240, 240]Couldn't open the file for reasons unknown: "},
-			{err::ALERT_MULTIPLE_FILES, "[240, 240, 240]Multiple file paths entered, every file will use the same compile settings.\n"}
+			{err::ERROR_FILE_NOT_FOUND, "File $path not found."},
+			{err::ERROR_PERMISSION_DENIED, "Permission to file $path denied."},
+			{err::ERROR_IS_A_DIRECTORY, "$path is a directory."},
+			{err::ERROR_NOT_DOT_PRISM, "$path is not a .prism file."},
+			{err::UKNOWN_FILE_ERROR, "Couldn't open the file $path for reasons unknown"},
+			{err::ALERT_MULTIPLE_FILES, "Multiple file paths entered, every file will use the same compile settings"}
 		};
 
-	public:
-		void log(uint32_t error_code);
-	};
+		void execute_log(uint32_t error_code, const std::vector<std::string>& args);
 
+		template<typename T>
+		std::string to_str(T val) {
+			std::ostringstream ss;
+			ss << val;
+			return ss.str();
+		}
+
+	public:
+		template<typename... Args>
+		void log(uint32_t error_code, Args... args) {
+			std::vector<std::string> s_args;
+			(s_args.push_back(to_str(args)), ...);
+			execute_log(error_code, s_args);
+		}
+
+	};
 }

@@ -8,6 +8,6 @@ int main(int argc, char* argv[]) {
 	for (int i = 0; i < filecount; i++) {
 		prism::PrismReader prismreader(argreader.file(i));
 
-		if (prismreader.is_open()) prismreader.dump();
+		if (argreader.getconfig_bool(prism::ConfigId::DumpPrism) && prismreader.is_open()) prismreader.dump();
 	}
 }

@@ -9,6 +9,7 @@ namespace prism {
 
 	class PrismReader {
 	private:
+		std::string filepath;
 		std::ifstream ifstream_code;
 		std::ostringstream ostringstream_code;
 		std::string string_code;
