@@ -19,18 +19,14 @@ prism::PrismReader::PrismReader(std::string filepath) {
 		if (errno == EISDIR) {
 			errorhandler.log(ERROR_IS_A_DIRECTORY);
 			logger.cerrrgb("[234, 222, 0]" + filepath);
-		}
-		else if (!filepath.ends_with(".prism")) {
+		} else if (!filepath.ends_with(".prism")) {
 			errorhandler.log(ERROR_NOT_DOT_PRISM);
 			logger.cerrrgb("[234, 222, 0]" + filepath);
-		}
-		else if (errno == ENOENT) {
+		} else if (errno == ENOENT) {
 			errorhandler.log(ERROR_FILE_NOT_FOUND);
-		}
-		else if (errno == EACCES) {
+		} else if (errno == EACCES) {
 			errorhandler.log(ERROR_PERMISSION_DENIED);
-		}
-		else {
+		} else {
 			errorhandler.log(UKNOWN_FILE_ERROR);
 			logger.cerrrgb("[234, 222, 0] " + filepath);
 		}

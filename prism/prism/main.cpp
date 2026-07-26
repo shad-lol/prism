@@ -1,14 +1,13 @@
 #include "include/.prism_reader/.prism_reader.hpp"
+#include "include/lexer/arg_reader.hpp"
 
 int main(int argc, char* argv[]) {
-	int filecount = 1;
-	std::string filepath = argv[1];
+	prism::ArgReader argreader(argc, argv);
 
-	for (int i = 1; i <= filecount; i++) {
-		prism::PrismReader reader(filepath);
-		if (!reader.is_open()) return 1;
+	size_t filecount = argreader.filecount();
+	for (int i = 0; i < filecount; i++) {
+		prism::PrismReader prismreader(argreader.file(i));
 
-		reader.dump();
-		std::string_view code = reader.get();
+		if (prismreader.is_open()) prismreader.dump();
 	}
 }
