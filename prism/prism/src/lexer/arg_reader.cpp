@@ -1,5 +1,6 @@
 #include <filesystem>
 #include <algorithm>
+#include <string>
 
 #include "include/lexer/arg_reader.hpp"
 #include "include/error_handler/error_handler.hpp"
@@ -29,30 +30,40 @@ prism::ArgReader::ArgReader(int argc, char* argv[], CompilerConfig& compilerconf
 	}
 
 	for (int i = 0; i < arguements.size(); i++) {
-		if (arguements[i].starts_with("-") && !arguements[i].starts_with("--")) {
+		std::string flag = arguements[i];
 
-		}
-
-		else if (arguements[i].starts_with("--")) {
-			if (arguements[i] == "--dump-prism") {
+		if (flag.starts_with("-") && !flag.starts_with("--")) {
+			if (flag == "-doll") {
 				compilerconfig.dump_prism = true;
 			}
 		}
 
-		else if (!arguements[i].starts_with("-") && !arguements[i].starts_with("--")) {
-			ErrorHandler errorhandler;
+		else if (flag.starts_with("--")) {
+			if (flag == "--dump-prism") {
+				compilerconfig.dump_prism = true;
+			} else if (flag == "--dump-all") {
+				compilerconfig.dump_prism = true;
+			} else {
+				ErrorHandler errorhandler;
+				errorhandler.log(err::ERROR_INVALID_COMMAND, flag);
+			}
+		}
 
-			if (std::filesystem::is_directory(arguements[i])) {
+		else if (!flag.starts_with("-") && !flag.starts_with("--")) {
+			if (std::filesystem::is_directory(flag)) {
 				errno = EISDIR;
 			}
 
 			if (errno == EISDIR) {
-				errorhandler.log(ERROR_IS_A_DIRECTORY, arguements[i]);
+				ErrorHandler errorhandler;
+				errorhandler.log(ERROR_IS_A_DIRECTORY, flag);
 			}
-			else if (!arguements[i].ends_with(".prism")) {
-				errorhandler.log(ERROR_NOT_DOT_PRISM, arguements[i]);
+			else if (!flag.ends_with(".prism")) {
+				ErrorHandler errorhandler;
+				errorhandler.log(ERROR_NOT_DOT_PRISM, flag);
 			} else {
-				errorhandler.log(err::ERROR_INVALID_COMMAND, arguements[i]);
+				ErrorHandler errorhandler;
+				errorhandler.log(err::ERROR_INVALID_COMMAND, flag);
 			}
 		}
 	}
