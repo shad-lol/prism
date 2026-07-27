@@ -6,8 +6,7 @@
 #include "include/logger/logger.hpp"
 #include "include/error_handler/error_handler.hpp"
 
-prism::PrismReader::PrismReader(std::string filepath) {
-	this->filepath = filepath;
+prism::PrismReader::PrismReader(std::string filepath, CompilerConfig& compilerconfig) {
 	ifstream_code.open(filepath);
 	if (!ifstream_code.is_open()) {
 		ErrorHandler errorhandler;
@@ -20,6 +19,12 @@ prism::PrismReader::PrismReader(std::string filepath) {
 			errorhandler.log(UKNOWN_FILE_ERROR, filepath);
 		}
 	}
+
+	if (compilerconfig.dump_prism) {
+		ErrorHandler errorhandler;
+		errorhandler.log(INFO_PRISM_DUMP, filepath, string_code);
+	}
+
 	ostringstream_code << ifstream_code.rdbuf();
 	string_code = ostringstream_code.str();
 }
@@ -31,13 +36,7 @@ prism::PrismReader::~PrismReader() {
 }
 
 std::string_view prism::PrismReader::get() {
-	return this->string_code;
-}
-
-void prism::PrismReader::dump() {
-	Logger logger;
-	logger.coutrgb("[234, 222, 0]" + filepath + ":[]\n");
-	std::cout << string_code << "\n\n\n";
+	return string_code;
 }
 
 bool prism::PrismReader::is_open() {

@@ -3,23 +3,29 @@
 
 #include "include/lexer/arg_reader.hpp"
 #include "include/error_handler/error_handler.hpp"
+#include "include/lexer/compiler_config.hpp"
 
-prism::ArgReader::ArgReader(int argc, char* argv[]) {
+prism::ArgReader::ArgReader(int argc, char* argv[], CompilerConfig& compilerconfig) {
 	if (argc < 1 && argv == nullptr) {
-		prism::ErrorHandler errorhandler;
+		ErrorHandler errorhandler;
 		errorhandler.log(ERROR_NO_ARGUEMENTS);
 	}
 
 	arguements.assign(argv + 1, argv + argc);
 
-	int i = 0;
-	while (i < arguements.size()) {
+	for (int i = 0; i < arguements.size(); ) {
 		if (arguements[i].ends_with(".prism")) {
 			files.push_back(arguements[i]);
 			arguements.erase(arguements.begin() + i);
+			compilerconfig.filecount++;
 		} else {
 			i++;
 		}
+	}
+
+	if (compilerconfig.filecount > 1) {
+		ErrorHandler errorhandler;
+		errorhandler.log(ALERT_MULTIPLE_FILES);
 	}
 
 	for (int i = 0; i < arguements.size(); i++) {
@@ -28,8 +34,8 @@ prism::ArgReader::ArgReader(int argc, char* argv[]) {
 		}
 
 		else if (arguements[i].starts_with("--")) {
-			if (arguements[i] == "--prism-dump") {
-				compileconfig.dump_prism = true;
+			if (arguements[i] == "--dump-prism") {
+				compilerconfig.dump_prism = true;
 			}
 		}
 
@@ -53,19 +59,6 @@ prism::ArgReader::ArgReader(int argc, char* argv[]) {
 }
 
 size_t prism::ArgReader::filecount() {
-	if (files.size() > 1) {
-		prism::ErrorHandler errorhandler;
-		errorhandler.log(ALERT_MULTIPLE_FILES);
-	}
+	
 	return files.size();
-}
-
-prism::ArgReader::ConfigValue prism::ArgReader::getconfig_wrapper(ConfigId id) const {
-	switch (id) {
-		case ConfigId::DumpPrism: return compileconfig.dump_prism;
-		default:
-			ErrorHandler errorhandler;
-			errorhandler.log(err::ERROR_INVALID_CONFIG_ID);
-			return ConfigValue{};
-	}
 }
