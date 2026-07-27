@@ -20,13 +20,15 @@ prism::PrismReader::PrismReader(std::string filepath, CompilerConfig& compilerco
 		}
 	}
 
-	if (compilerconfig.dump_prism) {
-		ErrorHandler errorhandler;
-		errorhandler.log(INFO_PRISM_DUMP, filepath, string_code);
-	}
-
 	ostringstream_code << ifstream_code.rdbuf();
 	string_code = ostringstream_code.str();
+
+	if (compilerconfig.dump_prism) {
+		ErrorHandler errorhandler;
+		Logger logger;
+		errorhandler.log(INFO_PRISM_DUMP, filepath);
+		logger.cerrrgb(string_code + "\n\n");
+	}
 }
 
 prism::PrismReader::~PrismReader() {

@@ -53,6 +53,9 @@
     <ClInclude Include="prism\include\lexer\compiler_config.hpp">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="prism\include\lexer\token.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="examples\01_the_basics.prism" />

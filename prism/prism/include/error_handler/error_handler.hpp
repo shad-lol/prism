@@ -46,9 +46,9 @@ namespace prism {
 			{err::ERROR_IS_A_DIRECTORY, "$path is a directory."},
 			{err::ERROR_NOT_DOT_PRISM, "$path is not a .prism file."},
 			{err::UKNOWN_FILE_ERROR, "Couldn't open the file $path for reasons unknown"},
-			{err::ALERT_MULTIPLE_FILES, "Multiple file paths entered, every file will use the same compile settings"},
+			{err::ALERT_MULTIPLE_FILES, "Multiple file paths entered, every file will use the same compile settings."},
 
-			{err::INFO_PRISM_DUMP, "$filepath:\n$stringcode\n\n"}
+			{err::INFO_PRISM_DUMP, "$filepath:"}
 		};
 
 		void execute_log(uint32_t error_code, const std::vector<std::string>& args);

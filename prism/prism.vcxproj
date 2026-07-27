@@ -165,6 +165,7 @@
   <ItemGroup>
     <ClInclude Include="prism\include\.prism_reader\.prism_reader.hpp" />
     <ClInclude Include="prism\include\lexer\compiler_config.hpp" />
+    <ClInclude Include="prism\include\lexer\token.hpp" />
     <ClInclude Include="prism\include\logger\logger.hpp" />
     <ClInclude Include="prism\include\error_handler\error_handler.hpp" />
     <ClInclude Include="prism\include\lexer\arg_reader.hpp" />
