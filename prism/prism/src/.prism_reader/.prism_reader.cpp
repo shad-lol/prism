@@ -27,7 +27,7 @@ prism::PrismReader::PrismReader(std::string filepath, CompilerConfig& compilerco
 		ErrorHandler errorhandler;
 		Logger logger;
 		errorhandler.log(INFO_PRISM_DUMP, filepath);
-		logger.cerrrgb(string_code + "\n\n");
+		logger.coutrgb("[78, 201, 176]" + string_code + "\n\n");
 	}
 }
 

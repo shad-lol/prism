@@ -7,8 +7,9 @@ namespace prism {
 
 	enum TokenType {
 		KEYWORD_ENTRY,
-		KEYWORD_IF,
-		KEYWORD_ALT,
+		KEYWORD_RETURN,
+
+		IDENTIFIER,
 
 		LBRACE,
 		RBRACE,
@@ -16,14 +17,16 @@ namespace prism {
 		SEMICOLON,
 
 		LITERAL_INT,
+		LITERAL_FLOAT,
 
+		INVALID,
 		UNKNOWN,
 	};
 
 	struct Token {
 		TokenType type;
 		std::string lexeme;
-		std::variant<std::monostate, int32_t> value;
+		std::variant<std::monostate, int, double> value;
 	};
 
 }

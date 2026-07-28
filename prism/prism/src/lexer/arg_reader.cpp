@@ -29,12 +29,11 @@ prism::ArgReader::ArgReader(int argc, char* argv[], CompilerConfig& compilerconf
 		errorhandler.log(ALERT_MULTIPLE_FILES);
 	}
 
-	for (int i = 0; i < arguements.size(); i++) {
-		std::string flag = arguements[i];
-
+	for (std::string flag : arguements) {
 		if (flag.starts_with("-") && !flag.starts_with("--")) {
 			if (flag == "-doll") {
 				compilerconfig.dump_prism = true;
+				compilerconfig.dump_tokens = true;
 			}
 		}
 
@@ -43,6 +42,7 @@ prism::ArgReader::ArgReader(int argc, char* argv[], CompilerConfig& compilerconf
 				compilerconfig.dump_prism = true;
 			} else if (flag == "--dump-all") {
 				compilerconfig.dump_prism = true;
+				compilerconfig.dump_tokens = true;
 			} else {
 				ErrorHandler errorhandler;
 				errorhandler.log(err::ERROR_INVALID_COMMAND, flag);

@@ -24,8 +24,10 @@ namespace prism {
 		ERROR_NOT_DOT_PRISM =     0xE0000103,
 		UKNOWN_FILE_ERROR =       0xE0000104,
 		ALERT_MULTIPLE_FILES =    0xA0000105,
+		INFO_PRISM_DUMP =         0x90000106,
 
-		INFO_PRISM_DUMP =         0x90000001,
+		ERROR_MULTIPLE_DOTS =     0xE0000201,
+		INFO_TOKENS_DUMP =        0x90000202,
 	};
 
 	class ErrorHandler {
@@ -46,9 +48,11 @@ namespace prism {
 			{err::ERROR_IS_A_DIRECTORY, "$path is a directory."},
 			{err::ERROR_NOT_DOT_PRISM, "$path is not a .prism file."},
 			{err::UKNOWN_FILE_ERROR, "Couldn't open the file $path for reasons unknown"},
-			{err::ALERT_MULTIPLE_FILES, "Multiple file paths entered, every file will use the same compile settings."},
+			{err::ALERT_MULTIPLE_FILES, "Multiple file paths entered, every file will use the same compile settings.\n"},
+			{err::INFO_PRISM_DUMP, "$filepath:\n"},
 
-			{err::INFO_PRISM_DUMP, "$filepath:"}
+			{err::ERROR_MULTIPLE_DOTS, "floats can't have more than one dot: $float"},
+			{err::INFO_TOKENS_DUMP, "$filepath:\n"}
 		};
 
 		void execute_log(uint32_t error_code, const std::vector<std::string>& args);
