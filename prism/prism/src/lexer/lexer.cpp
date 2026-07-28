@@ -117,6 +117,13 @@ prism::Lexer::Lexer(std::string_view code, const CompilerConfig& compilerconfig)
 		i++;
 	}
 
+	for (const auto& token : tokens) {
+		if (token.type == TokenType::INVALID || token.type == TokenType::UNKNOWN) {
+			ErrorHandler errorhandler;
+			errorhandler.log(ERROR_INVALID_TOKEN, token.lexeme);
+		}
+	}
+
 	if (compilerconfig.dump_tokens) {
 		size_t lexeme_len = 0;
 		for (const auto& token : tokens) {

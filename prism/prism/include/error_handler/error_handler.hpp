@@ -27,7 +27,8 @@ namespace prism {
 		INFO_PRISM_DUMP =         0x90000106,
 
 		ERROR_MULTIPLE_DOTS =     0xE0000201,
-		INFO_TOKENS_DUMP =        0x90000202,
+		ERROR_INVALID_TOKEN =     0xE0000202,
+		INFO_TOKENS_DUMP =        0x90000203,
 	};
 
 	class ErrorHandler {
@@ -39,19 +40,20 @@ namespace prism {
 			{err::ERROR, "error"},
 			{err::FATAL, "fatal error"},
 
-			{err::ERROR_NO_ARGUEMENTS, "No arguments"},
-			{err::ERROR_INVALID_COMMAND, "$cmd is an invalid command"},
-			{err::ERROR_INVALID_CONFIG_ID, "$id is an invalid config id"},
+			{err::ERROR_NO_ARGUEMENTS, "No arguments."},
+			{err::ERROR_INVALID_COMMAND, "$cmd is an invalid command."},
+			{err::ERROR_INVALID_CONFIG_ID, "$id is an invalid config id."},
 
 			{err::ERROR_FILE_NOT_FOUND, "File $path not found."},
 			{err::ERROR_PERMISSION_DENIED, "Permission to file $path denied."},
 			{err::ERROR_IS_A_DIRECTORY, "$path is a directory."},
 			{err::ERROR_NOT_DOT_PRISM, "$path is not a .prism file."},
-			{err::UKNOWN_FILE_ERROR, "Couldn't open the file $path for reasons unknown"},
+			{err::UKNOWN_FILE_ERROR, "Couldn't open the file $path for reasons unknown."},
 			{err::ALERT_MULTIPLE_FILES, "Multiple file paths entered, every file will use the same compile settings.\n"},
 			{err::INFO_PRISM_DUMP, "$filepath:\n"},
 
-			{err::ERROR_MULTIPLE_DOTS, "floats can't have more than one dot: $float"},
+			{err::ERROR_MULTIPLE_DOTS, "floats can't have more than one dot: $float."},
+			{err::ERROR_INVALID_TOKEN, "$token is an invalid token."},
 			{err::INFO_TOKENS_DUMP, "$filepath:\n"}
 		};
 
