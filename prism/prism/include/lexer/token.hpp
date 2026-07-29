@@ -17,16 +17,18 @@ namespace prism {
 		SEMICOLON,
 
 		LITERAL_INT,
+		LITERAL_LL,
 		LITERAL_FLOAT,
+		LITERAL_DOUBLE,
 
 		INVALID,
 		UNKNOWN,
 	};
 
 	struct Token {
-		TokenType type;
 		std::string lexeme;
-		std::variant<std::monostate, int, double> value;
+		TokenType type;
+		std::variant<std::monostate, int, long long, float, double> value;
 	};
 
 }

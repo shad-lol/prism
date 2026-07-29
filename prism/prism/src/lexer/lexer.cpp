@@ -33,19 +33,19 @@ prism::Lexer::Lexer(std::string_view code, const CompilerConfig& compilerconfig)
 		}
 
 		if (curr == '{') {
-			tokens.push_back({ TokenType::LBRACE, "{", std::monostate{} });
+			tokens.push_back({ "{", TokenType::LBRACE, std::monostate{} });
 			i++;
 
 			continue;
 		}
 		if (curr == '}') {
-			tokens.push_back({ TokenType::RBRACE, "}", std::monostate{} });
+			tokens.push_back({ "}", TokenType::RBRACE, std::monostate{} });
 			i++;
 
 			continue;
 		}
 		if (curr == ';') {
-			tokens.push_back({ TokenType::SEMICOLON, ";", std::monostate{} });
+			tokens.push_back({ ";", TokenType::SEMICOLON, std::monostate{} });
 			i++;
 
 			continue;
@@ -61,9 +61,9 @@ prism::Lexer::Lexer(std::string_view code, const CompilerConfig& compilerconfig)
 
 			auto it = keywords.find(identifier);
 			if (it != keywords.end()) {
-				tokens.push_back({ it->second, identifier, std::monostate{} });
+				tokens.push_back({ identifier, it->second, std::monostate{} });
 			} else {
-				tokens.push_back({ TokenType::IDENTIFIER, identifier, std::monostate{} });
+				tokens.push_back({ identifier, TokenType::IDENTIFIER, std::monostate{} });
 			}
 
 			continue;
@@ -71,7 +71,10 @@ prism::Lexer::Lexer(std::string_view code, const CompilerConfig& compilerconfig)
 
 		if (std::isdigit(curr)) {
 			std::string num_str;
+			bool is_int = true;
+			bool is_long_long = false;
 			bool is_float = false;
+			bool is_double = false;
 			bool has_error = false;
 
 			while (i < length) {
@@ -81,13 +84,19 @@ prism::Lexer::Lexer(std::string_view code, const CompilerConfig& compilerconfig)
 					num_str += next;
 					i++;
 				} else if (next == '.') {
-					if (is_float) {
+					if (is_double) {
 						has_error = true;
 						num_str += next;
 					}
-					is_float = true;
+					is_double = true;
 					num_str += next;
 					i++;
+				} else if (next == 'f' && is_double) {
+					is_double = false;
+					is_float = true;
+				} else if (next == 'L' && code[i + 1] == 'L' && is_int) {
+					is_int = false;
+					is_long_long = true;
 				} else {
 					break;
 				}
@@ -96,24 +105,30 @@ prism::Lexer::Lexer(std::string_view code, const CompilerConfig& compilerconfig)
 			if (has_error) {
 				ErrorHandler errorhandler;
 				errorhandler.log(ERROR_MULTIPLE_DOTS, num_str);
-				tokens.push_back({ TokenType::INVALID, num_str, std::monostate() });
+				tokens.push_back({ num_str, TokenType::INVALID, std::monostate() });
 
 				continue;
 			}
 
-			if (is_float) {
+			if (is_double) {
 				double value = std::stod(num_str);
-				tokens.push_back({ TokenType::LITERAL_FLOAT, num_str, value });
+				tokens.push_back({ num_str, TokenType::LITERAL_DOUBLE, value });
+			} else if (is_float) {
+				float value = std::stof(num_str);
+				tokens.push_back({ num_str, TokenType::LITERAL_FLOAT, value });
+			} else if (is_long_long) {
+				long long value = std::stoll(num_str);
+				tokens.push_back({ num_str, TokenType::LITERAL_LL, value });
 			} else {
 				int value = std::stoi(num_str);
-				tokens.push_back({ TokenType::LITERAL_INT, num_str, value });
+				tokens.push_back({ num_str, TokenType::LITERAL_INT, value });
 			}
 
 			continue;
 		}
 
 		std::string unknown_char(1, curr);
-		tokens.push_back({ TokenType::UNKNOWN, unknown_char, std::monostate{} });
+		tokens.push_back({ unknown_char, TokenType::UNKNOWN, std::monostate{} });
 		i++;
 	}
 
@@ -152,7 +167,9 @@ prism::Lexer::Lexer(std::string_view code, const CompilerConfig& compilerconfig)
 				case TokenType::SEMICOLON:     translation = "SEMICOLON"; break;
 
 				case TokenType::LITERAL_INT:   translation = "LITERAL_INT"; break;
+				case TokenType::LITERAL_LL:    translation = "LITERAL_LL"; break;
 				case TokenType::LITERAL_FLOAT: translation = "LITERAL_FLOAT"; break;
+				case TokenType::LITERAL_DOUBLE: translation = "LITERAL_DOUBLE"; break;
 
 				case TokenType::INVALID:       translation = "INVALID"; has_error = true; break;
 				case TokenType::UNKNOWN:       translation = "UNKNOWN"; has_error = true; break;

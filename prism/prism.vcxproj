@@ -161,6 +161,7 @@
     <ClCompile Include="prism\src\error_handler\error_handler.cpp" />
     <ClCompile Include="prism\src\lexer\arg_reader.cpp" />
     <ClCompile Include="prism\src\lexer\lexer.cpp" />
+    <ClCompile Include="prism\src\parser\parser.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="prism\include\.prism_reader\.prism_reader.hpp" />
@@ -170,6 +171,8 @@
     <ClInclude Include="prism\include\error_handler\error_handler.hpp" />
     <ClInclude Include="prism\include\lexer\arg_reader.hpp" />
     <ClInclude Include="prism\include\lexer\lexer.hpp" />
+    <ClInclude Include="prism\include\parser\parser.hpp" />
+    <ClInclude Include="prism\include\parser\node.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="examples\01_the_basics.prism" />
