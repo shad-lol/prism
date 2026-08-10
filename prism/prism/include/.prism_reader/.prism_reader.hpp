@@ -19,11 +19,9 @@ namespace prism {
 		PrismReader(std::string filepath, CompilerConfig& compilerconfig);
 		~PrismReader();
 
-		std::string_view get();
+		std::string_view get() { return string_code; };
 
-		void dump();
-
-		bool is_open();
+		bool is_open() { return ifstream_code.is_open(); };
 	};
 
 }
