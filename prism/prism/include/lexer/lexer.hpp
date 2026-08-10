@@ -16,7 +16,8 @@ namespace prism {
 		static const std::unordered_map<std::string, TokenType> keywords;
 
 	public:
-		Lexer(std::string_view code, const CompilerConfig& compilerconfig);
+		Lexer(std::string_view& code, const CompilerConfig& compilerconfig);
+		std::vector<Token> get() { return tokens; }
 	};
 
 }

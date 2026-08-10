@@ -1,16 +1,16 @@
-#include <sstream>
-#include <iomanip>
-
 #include "include/lexer/lexer.hpp"
 #include "include/error_handler/error_handler.hpp"
 #include "include/logger/logger.hpp"
+
+#include <sstream>
+#include <iomanip>
 
 const std::unordered_map<std::string, prism::TokenType> prism::Lexer::keywords = {
 	{"entry", prism::TokenType::KEYWORD_ENTRY},
 	{"return", prism::TokenType::KEYWORD_RETURN}
 };
 
-prism::Lexer::Lexer(std::string_view code, const CompilerConfig& compilerconfig) {
+prism::Lexer::Lexer(std::string_view& code, const CompilerConfig& compilerconfig) {
 	tokens.reserve(code.size() / 4);
 
 	size_t i = 0;
@@ -40,6 +40,18 @@ prism::Lexer::Lexer(std::string_view code, const CompilerConfig& compilerconfig)
 		}
 		if (curr == '}') {
 			tokens.push_back({ "}", TokenType::RBRACE, std::monostate{} });
+			i++;
+
+			continue;
+		}
+		if (curr == '(') {
+			tokens.push_back({ "(", TokenType::LPAREN, std::monostate{} });
+			i++;
+
+			continue;
+		}
+		if (curr == ')') {
+			tokens.push_back({ ")", TokenType::RPAREN, std::monostate{} });
 			i++;
 
 			continue;
@@ -104,7 +116,7 @@ prism::Lexer::Lexer(std::string_view code, const CompilerConfig& compilerconfig)
 
 			if (has_error) {
 				ErrorHandler errorhandler;
-				errorhandler.log(ERROR_MULTIPLE_DOTS, num_str);
+				errorhandler.log(ERROR_MULTIPLE_DOTS, compilerconfig, num_str);
 				tokens.push_back({ num_str, TokenType::INVALID, std::monostate() });
 
 				continue;
@@ -132,10 +144,15 @@ prism::Lexer::Lexer(std::string_view code, const CompilerConfig& compilerconfig)
 		i++;
 	}
 
+	tokens.push_back({ "EndOfFile", TokenType::EOFILE, std::monostate{} });
+
 	for (const auto& token : tokens) {
-		if (token.type == TokenType::INVALID || token.type == TokenType::UNKNOWN) {
+		if (token.type == TokenType::INVALID) {
 			ErrorHandler errorhandler;
-			errorhandler.log(ERROR_INVALID_TOKEN, token.lexeme);
+			errorhandler.log(ERROR_INVALID_TOKEN, compilerconfig, token.lexeme);
+		} else if (token.type == TokenType::UNKNOWN) {
+			ErrorHandler errorhandler;
+			errorhandler.log(ERROR_UNKNOWN_TOKEN, compilerconfig, token.lexeme);
 		}
 	}
 
@@ -156,6 +173,8 @@ prism::Lexer::Lexer(std::string_view code, const CompilerConfig& compilerconfig)
 			std::string spacing = "               ";
 			bool has_error = false;
 			switch (token.type) {
+				case TokenType::EOFILE: translation = "EOFILE"; break;
+
 				case TokenType::KEYWORD_ENTRY: translation = "KEYWORD_ENTRY"; break;
 				case TokenType::KEYWORD_RETURN: translation = "KEYWORD_RETURN"; break;
 
@@ -163,6 +182,9 @@ prism::Lexer::Lexer(std::string_view code, const CompilerConfig& compilerconfig)
 
 				case TokenType::LBRACE:        translation = "LBRACE"; break;
 				case TokenType::RBRACE:        translation = "RBRACE"; break;
+
+				case TokenType::LPAREN:        translation = "LPAREN"; break;
+				case TokenType::RPAREN:        translation = "RPAREN"; break;
 
 				case TokenType::SEMICOLON:     translation = "SEMICOLON"; break;
 
@@ -197,7 +219,7 @@ prism::Lexer::Lexer(std::string_view code, const CompilerConfig& compilerconfig)
 		dump << '\n';
 		ErrorHandler errorhandler;
 		Logger logger;
-		errorhandler.log(INFO_TOKENS_DUMP, compilerconfig.filepath);
-		logger.coutrgb(dump.str());
+		errorhandler.log(INFO_TOKENS_DUMP, compilerconfig, compilerconfig.filepath);
+		logger.coutrgb(dump.str(), compilerconfig.ansi);
 	}
 }

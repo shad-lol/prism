@@ -6,6 +6,8 @@
 namespace prism {
 
 	enum TokenType {
+		EOFILE,
+
 		KEYWORD_ENTRY,
 		KEYWORD_RETURN,
 
@@ -14,12 +16,19 @@ namespace prism {
 		LBRACE,
 		RBRACE,
 
+		LPAREN,
+		RPAREN,
+
 		SEMICOLON,
 
 		LITERAL_INT,
 		LITERAL_LL,
 		LITERAL_FLOAT,
 		LITERAL_DOUBLE,
+
+		ROOT,
+		FUNC_ARGUEMENTS,
+		FUNC_BODY,
 
 		INVALID,
 		UNKNOWN,
