@@ -27,6 +27,7 @@ namespace prism {
 		LITERAL_DOUBLE,
 
 		ROOT,
+		FUNC,
 		FUNC_ARGUEMENTS,
 		FUNC_BODY,
 

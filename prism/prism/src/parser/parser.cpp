@@ -5,50 +5,56 @@
 
 prism::Parser::Parser(std::vector<Token> tokens, CompilerConfig compilerconfig) {
 	this->tokens = tokens;
+	this->compilerconfig = compilerconfig;
 
 	while (!match(TokenType::EOFILE)) {
 		if (match(TokenType::KEYWORD_ENTRY)) {			
-			root.children.push_back(parseEntry(compilerconfig));
+			root.children.push_back(parseEntry());
 		}
 	}
 
 	if (compilerconfig.dump_ast) {
 		ErrorHandler errorhandler;
 		errorhandler.log(err::INFO_AST_DUMP, compilerconfig, compilerconfig.filepath);
-		print_tree(root, compilerconfig.utf8, max_depth(root), compilerconfig);
+		print_tree(root, compilerconfig.utf8, max_depth(root));
 	}
 }
 
-std::unique_ptr<prism::Node> prism::Parser::parseEntry(CompilerConfig compilerconfig) {
-	auto entry = std::make_unique<Node>(consume(
-		TokenType::KEYWORD_ENTRY, err::SYNTAX_NO_ENTRY, compilerconfig
+std::unique_ptr<prism::Node> prism::Parser::parseEntry() {
+	auto function = std::make_unique<Node>(Token(
+		"function",
+		TokenType::FUNC,
+		std::monostate{}
 	));
+	function->children.push_back(std::make_unique<Node>(consume(
+		TokenType::KEYWORD_ENTRY, err::SYNTAX_NO_ENTRY
+	)));
 
-	entry->children.push_back(parseFunctionName(compilerconfig));
+	function->children.push_back(parseFunctionName());
 	if (!match(TokenType::SEMICOLON)) {
-		entry->children.push_back(parseFunctionArguements(compilerconfig));
-		entry->children.push_back(parseFunctionBody(compilerconfig));
+		function->children.push_back(parseFunctionArguements());
+		function->children.push_back(parseFunctionBody());
 	}
 	else pos++;
 
-	return entry;
+	return function;
 }
 
-std::unique_ptr<prism::Node> prism::Parser::parseFunctionName(CompilerConfig compilerconfig) {
+std::unique_ptr<prism::Node> prism::Parser::parseFunctionName() {
 	auto identifier = std::make_unique<Node>(consume(
-		TokenType::IDENTIFIER, err::SYNTAX_EXPECTED_IDENTIFIER, compilerconfig
+		TokenType::IDENTIFIER, err::SYNTAX_EXPECTED_IDENTIFIER
 	));
 	return identifier;
 }
 
-std::unique_ptr<prism::Node> prism::Parser::parseFunctionArguements(CompilerConfig compilerconfig) {
+std::unique_ptr<prism::Node> prism::Parser::parseFunctionArguements() {
 	auto arguements = std::make_unique<Node>(Token(
 		"arguements",
 		TokenType::FUNC_ARGUEMENTS,
 		std::monostate{}
 	));
 	
-	consume(TokenType::LPAREN, err::SYNTAX_ENTRY_ISNT_FUNCTION, compilerconfig);
+	consume(TokenType::LPAREN, err::SYNTAX_ENTRY_ISNT_FUNCTION);
 	while (!match(TokenType::RPAREN)) {
 		
 	}
@@ -57,14 +63,14 @@ std::unique_ptr<prism::Node> prism::Parser::parseFunctionArguements(CompilerConf
 	return arguements;
 }
 
-std::unique_ptr<prism::Node> prism::Parser::parseFunctionBody(CompilerConfig compilerconfig) {
+std::unique_ptr<prism::Node> prism::Parser::parseFunctionBody() {
 	auto body = std::make_unique<Node>(Token(
 		"body",
 		TokenType::FUNC_BODY,
 		std::monostate{}
 	));
 
-	consume(TokenType::LBRACE, err::SYNTAX_EXPECTED_SEMICOLON, compilerconfig);
+	consume(TokenType::LBRACE, err::SYNTAX_EXPECTED_SEMICOLON);
 	while (!match(TokenType::RBRACE)) {
 		if (match(TokenType::KEYWORD_RETURN)) {
 			auto ret = std::make_unique<Node>(pop());
@@ -96,7 +102,7 @@ bool prism::Parser::match(TokenType expected) {
 	return false;
 }
 
-prism::Token prism::Parser::consume(TokenType expected, prism::err error_code, CompilerConfig compilerconfig) {
+prism::Token prism::Parser::consume(TokenType expected, prism::err error_code) {
 	if (tokens[pos].type != expected) {
 		prism::ErrorHandler errorhandler;
 		errorhandler.log(error_code, compilerconfig);
@@ -113,14 +119,14 @@ int prism::Parser::max_depth(const Node& node, int depth) {
 	return mx;
 }
 
-void prism::Parser::print_tree(const Node& node, bool utf8, int max_depth, CompilerConfig compilerconfig, std::string prefix, bool isLast, int depth) {
+void prism::Parser::print_tree(const Node& node, bool utf8, int max_depth, std::string prefix, bool isLast, int depth) {
 	Logger logger;
 
 	if (node.value.lexeme == "root" && prefix.empty()) {
 		logger.coutrgb("[113, 86, 22]" + node.value.lexeme + "[]\n", compilerconfig.ansi);
 		for (size_t i = 0; i < node.children.size(); ++i) {
 			bool isChildLast = (i == node.children.size() - 1);
-			print_tree(*node.children[i], utf8, max_depth, compilerconfig, "", isChildLast, 1);
+			print_tree(*node.children[i], utf8, max_depth, "", isChildLast, 1);
 		}
 		return;
 	}
@@ -140,7 +146,7 @@ void prism::Parser::print_tree(const Node& node, bool utf8, int max_depth, Compi
 
 	for (size_t i = 0; i < node.children.size(); i++) {
 		bool isChildLast = (i == node.children.size() - 1);
-		print_tree(*node.children[i], utf8, max_depth, compilerconfig, nextPrefix, isChildLast, depth + 1);
+		print_tree(*node.children[i], utf8, max_depth, nextPrefix, isChildLast, depth + 1);
 	}
 }
 
