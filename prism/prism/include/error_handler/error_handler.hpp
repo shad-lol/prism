@@ -46,7 +46,7 @@ namespace prism {
 
 	class ErrorHandler {
 	private:
-		std::unordered_map<uint32_t, std::string> ERROR_MAP {
+		std::unordered_map<uint32_t, std::string> ERROR_MAP{
 			{err::SUCCESS, "success"},
 			{err::INFO, "info"},
 			{err::WARNING, "warning"},
