@@ -23,11 +23,9 @@ prism::PrismReader::PrismReader(std::string filepath, CompilerConfig& compilerco
 	ostringstream_code << ifstream_code.rdbuf();
 	string_code = ostringstream_code.str();
 
-	if (compilerconfig.dump_prism) {
+	if (compilerconfig.dump_source) {
 		ErrorHandler errorhandler;
-		Logger logger;
-		errorhandler.log(INFO_PRISM_DUMP, compilerconfig, filepath);
-		logger.coutrgb("[78, 201, 176]" + string_code + "\n\n", compilerconfig.ansi);
+		errorhandler.log(INFO_SOURCE_DUMP, compilerconfig, filepath, "[78, 201, 176]" + string_code + "\n");
 	}
 }
 

@@ -216,10 +216,7 @@ prism::Lexer::Lexer(std::string_view& code, const CompilerConfig& compilerconfig
 
 			dump << value << "[]\n";
 		}
-		dump << '\n';
 		ErrorHandler errorhandler;
-		Logger logger;
-		errorhandler.log(INFO_TOKENS_DUMP, compilerconfig, compilerconfig.filepath);
-		logger.coutrgb(dump.str(), compilerconfig.ansi);
+		errorhandler.log(INFO_TOKENS_DUMP, compilerconfig, compilerconfig.filepath, dump.str());
 	}
 }

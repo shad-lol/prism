@@ -9,7 +9,7 @@ namespace prism {
 		std::string filepath = "";
 		int filecount = 0;
 
-		bool dump_prism = false;
+		bool dump_source = false;
 		bool dump_tokens = false;
 		bool dump_ast = false;
 

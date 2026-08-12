@@ -30,136 +30,69 @@ prism::ArgReader::ArgReader(int argc, char* argv[], CompilerConfig& compilerconf
 	}
 
 	for (std::string flag : arguements) {
-		if (flag.starts_with("-") && !flag.starts_with("--")) {
-			if (flag.starts_with("-doll")) {
-				if (flag[5] == '=') {
-					if (flag.ends_with("true") || flag.ends_with("default")) {
-						compilerconfig.dump_prism = true;
-						compilerconfig.dump_tokens = true;
-						compilerconfig.dump_ast = true;
-					}
-					else if (flag.ends_with("false")) {
-						compilerconfig.dump_prism = false;
-						compilerconfig.dump_tokens = false;
-						compilerconfig.dump_ast = false;
-					}
-					else {
-						ErrorHandler errorhandler;
-						errorhandler.log(err::ERROR_INVALID_VALUE_CMD, compilerconfig, flag.substr(6), "-doll");
-					}
-				}
-				else {
-					compilerconfig.dump_prism = !compilerconfig.dump_prism;
-					compilerconfig.dump_tokens = !compilerconfig.dump_tokens;
-					compilerconfig.dump_ast = !compilerconfig.dump_ast;
-				}
-			}
-
-			else if (flag.starts_with("-utf8")) {
-				if (flag[5] == '=') {
-					if (flag.ends_with("true") || flag.ends_with("default")) {
-						compilerconfig.utf8 = true;
-					}
-					else if (flag.ends_with("false")) {
-						compilerconfig.utf8 = false;
-					}
-					else {
-						ErrorHandler errorhandler;
-						errorhandler.log(err::ERROR_INVALID_VALUE_CMD, compilerconfig, flag.substr(6), "-utf8");
-					}
-				}
-				else compilerconfig.utf8 = !compilerconfig.utf8;
-			}
-
-			else if (flag.starts_with("-ansi")) {
-				if (flag[5] == '=') {
-					if (flag.ends_with("true") || flag.ends_with("default")) {
-						compilerconfig.ansi = true;
-					}
-					else if (flag.ends_with("false")) {
-						compilerconfig.ansi = false;
-					}
-					else {
-						ErrorHandler errorhandler;
-						errorhandler.log(err::ERROR_INVALID_VALUE_CMD, compilerconfig, flag.substr(6), "-ansi");
-					}
-				}
-				else compilerconfig.ansi = !compilerconfig.ansi;
-			}
-
-			else if (flag.starts_with("-plain")) {
-				if (flag[6] == '=') {
-					if (flag.ends_with("true")) {
-						compilerconfig.ansi = false;
-						compilerconfig.utf8 = false;
-					}
-					else if (flag.ends_with("false")) {
-						compilerconfig.ansi = true;
-						compilerconfig.utf8 = true;
-					}
-					else if (flag.ends_with("default")) {
-						compilerconfig.ansi = true;
-						compilerconfig.utf8 = true;
-					}
-					else {
-						ErrorHandler errorhandler;
-						errorhandler.log(err::ERROR_INVALID_VALUE_CMD, compilerconfig, flag.substr(7), "-plain");
-					}
-				}
-				else {
-					compilerconfig.ansi = false;
-					compilerconfig.utf8 = false;
-				}
-			}
-			else if (flag.starts_with("-fancy")) {
-				if (flag[6] == '=') {
-					if (flag.ends_with("true") || flag.ends_with("default")) {
-						compilerconfig.ansi = true;
-						compilerconfig.utf8 = true;
-					}
-					else if (flag.ends_with("false")) {
-						compilerconfig.ansi = false;
-					}
-					else {
-						ErrorHandler errorhandler;
-						errorhandler.log(err::ERROR_INVALID_VALUE_CMD, compilerconfig, flag.substr(7), "-fancy");
-					}
-				}
-				else {
-					compilerconfig.ansi = true;
-					compilerconfig.utf8 = true;
-				}
-			}
-
-			else {
-				ErrorHandler errorhandler;
-				errorhandler.log(err::ERROR_INVALID_COMMAND, compilerconfig, flag);
-			}
+		if (flag == "-dump-source-off") {
+			compilerconfig.dump_source = false;
 		}
 
-		else if (flag.starts_with("--")) {
-			if (flag == "--dump-prism") {
-				compilerconfig.dump_prism = true;
-			}
-			else if (flag == "--dump-tokens") {
-				compilerconfig.dump_tokens = true;
-			}
-			else if (flag == "--dump-ast") {
-				compilerconfig.dump_ast = true;
-			}
-			else if (flag == "--dump-all") {
-				compilerconfig.dump_prism = true;
-				compilerconfig.dump_tokens = true;
-				compilerconfig.dump_ast = true;
-			}
-
-			else {
-				ErrorHandler errorhandler;
-				errorhandler.log(err::ERROR_INVALID_COMMAND, compilerconfig, flag);
-			}
+		else if (flag == "-dump-source-on") {
+			compilerconfig.dump_source = true;
 		}
 
-		else if (!flag.starts_with("-") && !flag.starts_with("--")) {
+		else if (flag == "-dump-tokens-off") {
+			compilerconfig.dump_tokens = false;
+		}
+
+		else if (flag == "-dump-tokens-on") {
+			compilerconfig.dump_tokens = true;
+		}
+
+		else if (flag == "-dump-ast-off") {
+			compilerconfig.dump_ast = false;
+		}
+
+		else if (flag == "-dump-ast-on") {
+			compilerconfig.dump_ast = true;
+		}
+
+		else if (flag == "-dump-all-off") {
+			compilerconfig.dump_source = false;
+			compilerconfig.dump_tokens = false;
+			compilerconfig.dump_ast = false;
+		}
+
+		else if (flag == "-doll" || flag == "-dump-all-on") {
+			compilerconfig.dump_source = true;
+			compilerconfig.dump_tokens = true;
+			compilerconfig.dump_ast = true;
+		}
+
+		else if (flag == "-ansi-off" || flag == "-color-off") {
+			compilerconfig.ansi = false;
+		}
+
+		else if (flag == "-ansi-on" || flag == "-color-on") {
+			compilerconfig.ansi = true;
+		}
+
+		else if (flag == "-utf8-off") {
+			compilerconfig.ansi = false;
+		}
+
+		else if (flag == "-utf8-on") {
+			compilerconfig.ansi = true;
+		}
+
+		else if (flag == "-plain") {
+			compilerconfig.ansi = false;
+			compilerconfig.utf8 = false;
+		}
+
+		else if (flag == "-fancy") {
+			compilerconfig.ansi = true;
+			compilerconfig.utf8 = true;
+		}
+
+		else if (!flag.starts_with("-")) {
 			if (std::filesystem::is_directory(flag)) {
 				errno = EISDIR;
 			}
@@ -175,6 +108,11 @@ prism::ArgReader::ArgReader(int argc, char* argv[], CompilerConfig& compilerconf
 				ErrorHandler errorhandler;
 				errorhandler.log(err::ERROR_INVALID_COMMAND, compilerconfig, flag);
 			}
+		}
+
+		else {
+			ErrorHandler errorhandler;
+			errorhandler.log(err::ERROR_INVALID_COMMAND, compilerconfig, flag);
 		}
 	}
 }

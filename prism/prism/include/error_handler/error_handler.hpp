@@ -22,7 +22,7 @@ namespace prism {
 		ERROR_INVALID_CONFIG_ID =    0xE0000002,
 		ERROR_INVALID_VALUE_CMD =    0xE0000003,
 
-		INFO_PRISM_DUMP =            0x90000100,
+		INFO_SOURCE_DUMP =           0x90000100,
 		ERROR_FILE_NOT_FOUND =       0xE0000101,
 		ERROR_PERMISSION_DENIED =    0xE0000102,
 		ERROR_IS_A_DIRECTORY =       0xE0000103,
@@ -59,7 +59,7 @@ namespace prism {
 			{err::ERROR_INVALID_CONFIG_ID, "$id is an invalid config id."},
 			{err::ERROR_INVALID_VALUE_CMD, "$value is an invalid value for $command command"},
 
-			{err::INFO_PRISM_DUMP, "$filepath:\n"},
+			{err::INFO_SOURCE_DUMP, "$filepath:\n\n$code"},
 			{err::ERROR_FILE_NOT_FOUND, "File $path not found."},
 			{err::ERROR_PERMISSION_DENIED, "Permission to file $path denied."},
 			{err::ERROR_IS_A_DIRECTORY, "$path is a directory."},
@@ -67,12 +67,12 @@ namespace prism {
 			{err::UKNOWN_FILE_ERROR, "Couldn't open the file $path for reasons unknown."},
 			{err::ALERT_MULTIPLE_FILES, "Multiple file paths entered, every file will use the same compile settings.\n"},
 
-			{err::INFO_TOKENS_DUMP, "$filepath:\n"},
+			{err::INFO_TOKENS_DUMP, "$filepath:\n\n$tokens"},
 			{err::ERROR_MULTIPLE_DOTS, "floats can't have more than one dot: $float."},
 			{err::ERROR_INVALID_TOKEN, "$token is an invalid token."},
 			{err::ERROR_UNKNOWN_TOKEN, "$token is an unknown token."},
 
-			{err::INFO_AST_DUMP, "$filepath:\n"},
+			{err::INFO_AST_DUMP, "$filepath:\n\n$tree"},
 			{err::SYNTAX_NO_ENTRY, "no entry function found."},
 			{err::SYNTAX_ENTRY_ISNT_FUNCTION, "the entry point of the program must always be a function."},
 			{err::SYNTAX_EXPECTED_IDENTIFIER, "expected identifier."},

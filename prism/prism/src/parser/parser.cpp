@@ -15,8 +15,10 @@ prism::Parser::Parser(std::vector<Token> tokens, CompilerConfig compilerconfig) 
 
 	if (compilerconfig.dump_ast) {
 		ErrorHandler errorhandler;
-		errorhandler.log(err::INFO_AST_DUMP, compilerconfig, compilerconfig.filepath);
-		print_tree(root, compilerconfig.utf8, max_depth(root));
+		std::stringstream ss;
+		std::string tree = print_tree(root, ss, compilerconfig.utf8, max_depth(root));
+		tree.pop_back();
+		errorhandler.log(err::INFO_AST_DUMP, compilerconfig, compilerconfig.filepath, tree);
 	}
 }
 
@@ -119,16 +121,14 @@ int prism::Parser::max_depth(const Node& node, int depth) {
 	return mx;
 }
 
-void prism::Parser::print_tree(const Node& node, bool utf8, int max_depth, std::string prefix, bool isLast, int depth) {
-	Logger logger;
-
+std::string prism::Parser::print_tree(const Node& node, std::stringstream& ss, bool utf8, int max_depth, std::string prefix, bool isLast, int depth) {
 	if (node.value.lexeme == "root" && prefix.empty()) {
-		logger.coutrgb("[113, 86, 22]" + node.value.lexeme + "[]\n", compilerconfig.ansi);
+		ss << "[139, 69, 19]" << node.value.lexeme << "[]\n";
 		for (size_t i = 0; i < node.children.size(); ++i) {
 			bool isChildLast = (i == node.children.size() - 1);
-			print_tree(*node.children[i], utf8, max_depth, "", isChildLast, 1);
+			print_tree(*node.children[i], ss, utf8, max_depth, "", isChildLast, 1);
 		}
-		return;
+		return ss.str();
 	}
 
 	int r = 139 + (34 - 139) * depth / max_depth;   if (r < 34)  r = 34;
@@ -139,15 +139,17 @@ void prism::Parser::print_tree(const Node& node, bool utf8, int max_depth, std::
 	std::string color_tag_leafs = "[" + std::to_string(r + 35) + "," + std::to_string(g + 60) + "," + std::to_string(b + 15) + "]";
 	std::string branch = utf8 ? (isLast ? "└── " : "├── ") : (isLast ? "`-- " : "|-- ");
 
-	logger.coutrgb(prefix + color_tag_branches + branch + "[]" + color_tag_leafs + node.value.lexeme + "[]\n", compilerconfig.ansi);
+	ss << prefix << color_tag_branches << branch << "[]" << color_tag_leafs << node.value.lexeme << "[]\n";
 
 	std::string indent = utf8 ? (isLast ? "    " : "│   ") : (isLast ? "    " : "|   ");
 	std::string nextPrefix = prefix + (isLast ? "    " : (color_tag_branches + indent + "[]"));
 
 	for (size_t i = 0; i < node.children.size(); i++) {
 		bool isChildLast = (i == node.children.size() - 1);
-		print_tree(*node.children[i], utf8, max_depth, nextPrefix, isChildLast, depth + 1);
+		print_tree(*node.children[i], ss, utf8, max_depth, nextPrefix, isChildLast, depth + 1);
 	}
+
+	return ss.str();
 }
 
 const prism::Node& prism::Parser::get() {

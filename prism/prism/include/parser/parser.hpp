@@ -34,7 +34,7 @@ namespace prism {
 		void advance() { pos++; }
 
 		int max_depth(const Node& node, int depth = 0);
-		void print_tree(const Node& node, bool utf8, int max_depth, std::string prefix = "", bool isLast = false, int depth = 0);
+		std::string print_tree(const Node& node, std::stringstream& ss, bool utf8, int max_depth, std::string prefix = "", bool isLast = false, int depth = 0);
 
 		const Node& get();
 	};
