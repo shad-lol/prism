@@ -5,7 +5,7 @@
 #include <string>
 #include <string_view>
 
-#include "include/lexer/compiler_config.hpp"
+#include "include/compiler_config/compiler_config.hpp"
 
 namespace prism {
 
@@ -16,7 +16,7 @@ namespace prism {
 		std::string string_code;
 
 	public:
-		PrismReader(std::string filepath, CompilerConfig& compilerconfig);
+		PrismReader(const CompilerConfig& compilerconfig);
 		~PrismReader();
 
 		std::string_view get() { return string_code; };

@@ -14,10 +14,11 @@
 	#endif
 #endif
 
-#include "include/lexer/arg_reader.hpp"
+#include "include/arg_reader/arg_reader.hpp"
 #include "include/.prism_reader/.prism_reader.hpp"
 #include "include/lexer/lexer.hpp"
 #include "include/parser/parser.hpp"
+#include "include/polariton_ir/pir_builder.hpp"
 
 int main(int argc, char* argv[]) {
 
@@ -28,15 +29,12 @@ int main(int argc, char* argv[]) {
 	prism::CompilerConfig compilerconfig;
 	prism::ArgReader argreader(argc, argv, compilerconfig);
 
-	size_t filecount = argreader.filecount();
-	for (int i = 0; i < filecount; i++) {
+	for (size_t i = 0; i < argreader.filecount(); i++) {
 		compilerconfig.filepath = argreader.file(i);
-		prism::PrismReader prismreader(argreader.file(i), compilerconfig);
 
-		std::string_view code = prismreader.get();
-		prism::Lexer lexer(code, compilerconfig);
-
-		std::vector<prism::Token> tokens = lexer.get();
-		prism::Parser parser(tokens, compilerconfig);
+		prism::PrismReader prismreader(compilerconfig);
+		prism::Lexer lexer(prismreader.get(), compilerconfig);
+		prism::Parser parser(lexer.get(), compilerconfig);
+		prism::PIRBuilder(parser.get(), compilerconfig);
 	}
 }

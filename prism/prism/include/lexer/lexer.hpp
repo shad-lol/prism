@@ -1,12 +1,12 @@
 #pragma once
 
+#include "token.hpp"
+#include "include/arg_reader/arg_reader.hpp"
+#include "include/compiler_config/compiler_config.hpp"
+
 #include <vector>
 #include <string_view>
 #include <unordered_map>
-
-#include "token.hpp"
-#include "arg_reader.hpp"
-#include "compiler_config.hpp"
 
 namespace prism {
 
@@ -16,7 +16,7 @@ namespace prism {
 		static const std::unordered_map<std::string, TokenType> keywords;
 
 	public:
-		Lexer(std::string_view& code, const CompilerConfig& compilerconfig);
+		Lexer(const std::string_view& code, const CompilerConfig& compilerconfig);
 		std::vector<Token> get() { return tokens; }
 	};
 

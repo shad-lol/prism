@@ -1,6 +1,6 @@
-#include "include/lexer/arg_reader.hpp"
+#include "include/arg_reader/arg_reader.hpp"
 #include "include/error_handler/error_handler.hpp"
-#include "include/lexer/compiler_config.hpp"
+#include "include/compiler_config/compiler_config.hpp"
 
 #include <filesystem>
 #include <algorithm>
@@ -54,16 +54,26 @@ prism::ArgReader::ArgReader(int argc, char* argv[], CompilerConfig& compilerconf
 			compilerconfig.dump_ast = true;
 		}
 
+		else if (flag == "-dump-pir-off") {
+			compilerconfig.dump_pir = false;
+		}
+
+		else if (flag == "-dump-pir-on") {
+			compilerconfig.dump_pir = true;
+		}
+
 		else if (flag == "-dump-all-off") {
 			compilerconfig.dump_source = false;
 			compilerconfig.dump_tokens = false;
 			compilerconfig.dump_ast = false;
+			compilerconfig.dump_pir = false;
 		}
 
 		else if (flag == "-doll" || flag == "-dump-all-on") {
 			compilerconfig.dump_source = true;
 			compilerconfig.dump_tokens = true;
 			compilerconfig.dump_ast = true;
+			compilerconfig.dump_pir = true;
 		}
 
 		else if (flag == "-ansi-off" || flag == "-color-off") {

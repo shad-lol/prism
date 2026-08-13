@@ -5,7 +5,7 @@
 #include <vector>
 #include <variant>
 
-#include "compiler_config.hpp"
+#include "include/compiler_config/compiler_config.hpp"
 
 namespace prism {
 

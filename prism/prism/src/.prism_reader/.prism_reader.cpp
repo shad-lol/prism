@@ -6,17 +6,17 @@
 #include <cerrno>
 #include <filesystem>
 
-prism::PrismReader::PrismReader(std::string filepath, CompilerConfig& compilerconfig) {
-	ifstream_code.open(filepath);
+prism::PrismReader::PrismReader(const CompilerConfig& compilerconfig) {
+	ifstream_code.open(compilerconfig.filepath);
 	if (!ifstream_code.is_open()) {
 		ErrorHandler errorhandler;
 
 		if (errno == ENOENT) {
-			errorhandler.log(ERROR_FILE_NOT_FOUND, compilerconfig, filepath);
+			errorhandler.log(ERROR_FILE_NOT_FOUND, compilerconfig, compilerconfig.filepath);
 		} else if (errno == EACCES) {
-			errorhandler.log(ERROR_PERMISSION_DENIED, compilerconfig, filepath);
+			errorhandler.log(ERROR_PERMISSION_DENIED, compilerconfig, compilerconfig.filepath);
 		} else {
-			errorhandler.log(UKNOWN_FILE_ERROR, compilerconfig, filepath);
+			errorhandler.log(UKNOWN_FILE_ERROR, compilerconfig, compilerconfig.filepath);
 		}
 	}
 
@@ -25,7 +25,7 @@ prism::PrismReader::PrismReader(std::string filepath, CompilerConfig& compilerco
 
 	if (compilerconfig.dump_source) {
 		ErrorHandler errorhandler;
-		errorhandler.log(INFO_SOURCE_DUMP, compilerconfig, filepath, "[78, 201, 176]" + string_code + "\n");
+		errorhandler.log(INFO_SOURCE_DUMP, compilerconfig, compilerconfig.filepath, "[78, 201, 176]" + string_code + "\n");
 	}
 }
 

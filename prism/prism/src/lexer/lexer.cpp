@@ -10,7 +10,7 @@ const std::unordered_map<std::string, prism::TokenType> prism::Lexer::keywords =
 	{"return", prism::TokenType::KEYWORD_RETURN}
 };
 
-prism::Lexer::Lexer(std::string_view& code, const CompilerConfig& compilerconfig) {
+prism::Lexer::Lexer(const std::string_view& code, const CompilerConfig& compilerconfig) {
 	tokens.reserve(code.size() / 4);
 
 	size_t i = 0;
@@ -128,9 +128,11 @@ prism::Lexer::Lexer(std::string_view& code, const CompilerConfig& compilerconfig
 			} else if (is_float) {
 				float value = std::stof(num_str);
 				tokens.push_back({ num_str, TokenType::LITERAL_FLOAT, value });
+				i++;
 			} else if (is_long_long) {
 				long long value = std::stoll(num_str);
 				tokens.push_back({ num_str, TokenType::LITERAL_LL, value });
+				i += 2;
 			} else {
 				int value = std::stoi(num_str);
 				tokens.push_back({ num_str, TokenType::LITERAL_INT, value });
@@ -203,9 +205,9 @@ prism::Lexer::Lexer(std::string_view& code, const CompilerConfig& compilerconfig
 			else dump << "[30, 167, 69]";
 			dump << "(" << i << "):\t\t [] [108, 255, 123]Lexeme:[] [78, 201, 176]"
 				<< std::left << std::setw(lexeme_len) << token.lexeme
-				<< "[] [237, 146, 36]|[] [147, 147, 249]Token type:[] [78, 201, 176]"
+				<< "[] [237, 146, 36]" << (compilerconfig.utf8 ? "│" : "|") << "[] [147, 147, 249]Token type: [][78, 201, 176] "
 				<< std::left << std::setw(14) << translation
-				<< "[] [237, 146, 36]|[] [255, 121, 198]Value:[] [78, 201, 176]";
+				<< "[] [237, 146, 36]" << (compilerconfig.utf8 ? "│" : "|") << "[] [255, 121, 198]Value:[] [78, 201, 176]";
 
 			std::visit([&value](auto&& arg) {
 				using T = std::decay_t<decltype(arg)>;

@@ -3,7 +3,7 @@
 #include "include/lexer/token.hpp"
 #include "include/parser/node.hpp"
 #include "include/error_handler/error_handler.hpp"
-#include "include/lexer/compiler_config.hpp"
+#include "include/compiler_config/compiler_config.hpp"
 
 #include <vector>
 
@@ -17,7 +17,7 @@ namespace prism {
 		CompilerConfig compilerconfig;
 		
 	public:
-		Parser(std::vector<Token> tokens, CompilerConfig compilerconfig);
+		Parser(std::vector<Token> tokens, const CompilerConfig& compilerconfig);
 
 		std::unique_ptr<Node> parseEntry();
 

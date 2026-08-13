@@ -1,6 +1,6 @@
 #pragma once
 
-#include "include/lexer/compiler_config.hpp"
+#include "include/compiler_config/compiler_config.hpp"
 
 #include <string>
 #include <cstdint>
@@ -41,7 +41,9 @@ namespace prism {
 		SYNTAX_EXPECTED_IDENTIFIER = 0xC0000303,
 		SYNTAX_EXPECTED_SEMICOLON =  0xC0000304,
 		SYNTAX_PAREN_NOT_CLOSED =    0xC0000305,
-		SYNTAX_BRACES_NOT_CLOSED =   0xC0000306
+		SYNTAX_BRACES_NOT_CLOSED =   0xC0000306,
+
+		INFO_PIR_DUMP =              0x90000400
 	};
 
 	class ErrorHandler {
@@ -78,7 +80,9 @@ namespace prism {
 			{err::SYNTAX_EXPECTED_IDENTIFIER, "expected identifier."},
 			{err::SYNTAX_EXPECTED_SEMICOLON, "expected ;."},
 			{err::SYNTAX_PAREN_NOT_CLOSED, "parentheses not closed."},
-			{err::SYNTAX_BRACES_NOT_CLOSED, "curly braces not closed."}
+			{err::SYNTAX_BRACES_NOT_CLOSED, "curly braces not closed."},
+
+			{err::INFO_PIR_DUMP, "$filepath:\n\n$ir"}
 		};
 
 		void execute_log(err error_code, CompilerConfig compilerconfig, const std::vector<std::string>& args);
@@ -92,7 +96,7 @@ namespace prism {
 
 	public:
 		template<typename... Args>
-		void log(err error_code, CompilerConfig compilerconfig, Args... args) {
+		void log(err error_code, const CompilerConfig& compilerconfig, Args... args) {
 			std::vector<std::string> s_args;
 			(s_args.push_back(to_str(args)), ...);
 			execute_log(error_code, compilerconfig, s_args);

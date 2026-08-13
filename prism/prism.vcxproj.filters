@@ -24,7 +24,7 @@
     <ClCompile Include="prism\src\lexer\lexer.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="prism\src\lexer\arg_reader.cpp">
+    <ClCompile Include="prism\src\arg_reader\arg_reader.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="prism\src\error_handler\error_handler.cpp">
@@ -36,6 +36,12 @@
     <ClCompile Include="prism\src\parser\parser.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="prism\include\polariton_ir\pir_builder.hpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="prism\src\polariton_ir\pir_builder.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="prism\include\.prism_reader\.prism_reader.hpp">
@@ -44,7 +50,7 @@
     <ClInclude Include="prism\include\lexer\lexer.hpp">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="prism\include\lexer\arg_reader.hpp">
+    <ClInclude Include="prism\include\arg_reader\arg_reader.hpp">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="prism\include\error_handler\error_handler.hpp">
@@ -53,7 +59,7 @@
     <ClInclude Include="prism\include\logger\logger.hpp">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="prism\include\lexer\compiler_config.hpp">
+    <ClInclude Include="prism\include\compiler_config\compiler_config.hpp">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="prism\include\lexer\token.hpp">
@@ -63,6 +69,9 @@
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="prism\include\parser\node.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="prism\include\polariton_ir\pir_instruction.hpp">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>

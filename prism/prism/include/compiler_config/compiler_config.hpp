@@ -12,6 +12,7 @@ namespace prism {
 		bool dump_source = false;
 		bool dump_tokens = false;
 		bool dump_ast = false;
+		bool dump_pir = false;
 
 		bool ansi = true;
 		bool utf8 = true;

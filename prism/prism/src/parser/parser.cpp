@@ -3,7 +3,7 @@
 
 #include <iostream>
 
-prism::Parser::Parser(std::vector<Token> tokens, CompilerConfig compilerconfig) {
+prism::Parser::Parser(std::vector<Token> tokens, const CompilerConfig& compilerconfig) {
 	this->tokens = tokens;
 	this->compilerconfig = compilerconfig;
 
@@ -16,9 +16,7 @@ prism::Parser::Parser(std::vector<Token> tokens, CompilerConfig compilerconfig) 
 	if (compilerconfig.dump_ast) {
 		ErrorHandler errorhandler;
 		std::stringstream ss;
-		std::string tree = print_tree(root, ss, compilerconfig.utf8, max_depth(root));
-		tree.pop_back();
-		errorhandler.log(err::INFO_AST_DUMP, compilerconfig, compilerconfig.filepath, tree);
+		errorhandler.log(err::INFO_AST_DUMP, compilerconfig, compilerconfig.filepath, print_tree(root, ss, compilerconfig.utf8, max_depth(root)));
 	}
 }
 
