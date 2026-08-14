@@ -28,15 +28,16 @@ namespace prism {
 
 	class CodeGen {
 		private:
-			CompilerConfig compilerconfig;
 			std::vector<std::variant<prism::PIRInstruction, int, long long, float, double, std::string>> PIRStream;
-			std::string Ccode = "[78, 201, 176]";
+			std::string Ccode;
 
 		public:
-			CodeGen(std::vector<std::variant<prism::PIRInstruction, int, long long, float, double, std::string>> PIRStream, const CompilerConfig& compilerconfig);
+			CodeGen(std::vector<std::variant<prism::PIRInstruction, int, long long, float, double, std::string>> PIRStream, CompilerConfig& compilerconfig);
 
-			void C();
-			void LLVM();
+			void C(CompilerConfig& compilerconfig);
+			void LLVM(CompilerConfig& compilerconfig);
+
+			std::string get() { return Ccode; }
 	};
 
 }

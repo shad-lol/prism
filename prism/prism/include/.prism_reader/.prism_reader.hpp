@@ -35,9 +35,9 @@ namespace prism {
 		PrismReader(const CompilerConfig& compilerconfig);
 		~PrismReader();
 
-		std::string_view get() { return string_code; };
+		std::string_view get() { return string_code; }
 
-		bool is_open() { return ifstream_code.is_open(); };
+		bool is_open() { return ifstream_code.is_open(); }
 	};
 
 }

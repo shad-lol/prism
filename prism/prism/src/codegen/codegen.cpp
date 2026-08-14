@@ -20,15 +20,14 @@
 
 #include <iostream>
 
-prism::CodeGen::CodeGen(std::vector<std::variant<prism::PIRInstruction, int, long long, float, double, std::string>> PIRStream, const CompilerConfig& compilerconfig) {
-	this->compilerconfig = compilerconfig;
+prism::CodeGen::CodeGen(std::vector<std::variant<prism::PIRInstruction, int, long long, float, double, std::string>> PIRStream, CompilerConfig& compilerconfig) {
 	this->PIRStream = PIRStream;
 
-	if (compilerconfig.C) C();
-	if (compilerconfig.LLVM) LLVM();
+	if (compilerconfig.C) C(compilerconfig);
+	if (compilerconfig.LLVM) LLVM(compilerconfig);
 }
 
-void prism::CodeGen::C() {
+void prism::CodeGen::C(CompilerConfig& compilerconfig) {
 	std::string entryfunc_name;
 		
 	for (size_t i = 0; i < PIRStream.size(); i++) {
@@ -49,6 +48,7 @@ void prism::CodeGen::C() {
 
 				if (returntype == PIRInstruction::ENTRY) {
 					entryfunc_name = funcidentifier;
+					compilerconfig.appname = funcidentifier;
 					Ccode += "int " + funcidentifier;
 				}
 				else if (returntype == PIRInstruction::VOID) {
@@ -90,14 +90,14 @@ void prism::CodeGen::C() {
 		}
     }
 
-	Ccode += "int main(){return " + entryfunc_name + "();}[]";
+	Ccode += "int main(){return " + entryfunc_name + "();}";
 
 	if (compilerconfig.dump_c) {
 		ErrorHandler errorhandler;
-		errorhandler.log(err::INFO_C_DUMP, compilerconfig, compilerconfig.filepath, Ccode);
+		errorhandler.log(err::INFO_C_DUMP, compilerconfig, compilerconfig.filepath, "[78, 201, 176]" + Ccode + "[]\n");
 	}
 }
 
-void prism::CodeGen::LLVM() {
+void prism::CodeGen::LLVM(CompilerConfig& compilerconfig) {
 
 }

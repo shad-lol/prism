@@ -158,16 +158,23 @@
     <ClCompile Include="prism\include\polariton_ir\pir_builder.hpp" />
     <ClCompile Include="prism\main.cpp" />
     <ClCompile Include="prism\src\.prism_reader\.prism_reader.cpp" />
+    <ClCompile Include="prism\src\backend\backend.cpp" />
     <ClCompile Include="prism\src\codegen\codegen.cpp" />
     <ClCompile Include="prism\src\logger\logger.cpp" />
     <ClCompile Include="prism\src\error_handler\error_handler.cpp" />
     <ClCompile Include="prism\src\arg_reader\arg_reader.cpp" />
     <ClCompile Include="prism\src\lexer\lexer.cpp" />
     <ClCompile Include="prism\src\parser\parser.cpp" />
-    <ClCompile Include="prism\src\polariton_ir\pir_builder.cpp" />
+    <ClCompile Include="prism\src\polariton_ir\pir_builder.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="prism\include\.prism_reader\.prism_reader.hpp" />
+    <ClInclude Include="prism\include\backend\backend.hpp" />
     <ClInclude Include="prism\include\codegen\codegen.hpp" />
     <ClInclude Include="prism\include\compiler_config\compiler_config.hpp" />
     <ClInclude Include="prism\include\lexer\token.hpp" />

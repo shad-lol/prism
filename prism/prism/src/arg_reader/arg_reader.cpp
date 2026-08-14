@@ -86,12 +86,29 @@ prism::ArgReader::ArgReader(int argc, char* argv[], CompilerConfig& compilerconf
 			compilerconfig.dump_c = true;
 		}
 
+		else if (flag == "-dump-LLVM-off") {
+			compilerconfig.dump_llvm = false;
+		}
+
+		else if (flag == "-dump-LLVM-on") {
+			compilerconfig.dump_llvm = true;
+		}
+
+		else if (flag == "-dump-cmd-off") {
+			compilerconfig.dump_cmd = false;
+		}
+
+		else if (flag == "-dump-cmd-on") {
+			compilerconfig.dump_cmd = true;
+		}
+
 		else if (flag == "-dump-all-off") {
 			compilerconfig.dump_source = false;
 			compilerconfig.dump_tokens = false;
 			compilerconfig.dump_ast = false;
 			compilerconfig.dump_pir = false;
 			compilerconfig.dump_c = false;
+			compilerconfig.dump_cmd = false;
 		}
 
 		else if (flag == "-doll" || flag == "-dump-all-on") {
@@ -100,6 +117,79 @@ prism::ArgReader::ArgReader(int argc, char* argv[], CompilerConfig& compilerconf
 			compilerconfig.dump_ast = true;
 			compilerconfig.dump_pir = true;
 			compilerconfig.dump_c = true;
+			compilerconfig.dump_cmd = true;
+		}
+
+		else if (flag == "-generate-obj-off") {
+			compilerconfig.generate_obj = false;
+		}
+
+		else if (flag == "-generate-obj-on" || flag == "-generate-obj") {
+			compilerconfig.generate_obj = true;
+		}
+
+		else if (flag == "-O0") {
+			compilerconfig.O0 = true;
+			compilerconfig.O1 = false;
+			compilerconfig.O2 = false;
+			compilerconfig.O3 = false;
+			compilerconfig.Os = false;
+			compilerconfig.Oz = false;
+		}
+
+		else if (flag == "-O1") {
+			compilerconfig.O0 = false;
+			compilerconfig.O1 = true;
+			compilerconfig.O2 = false;
+			compilerconfig.O3 = false;
+			compilerconfig.Os = false;
+			compilerconfig.Oz = false;
+		}
+
+		else if (flag == "-O2") {
+			compilerconfig.O0 = false;
+			compilerconfig.O1 = false;
+			compilerconfig.O2 = true;
+			compilerconfig.O3 = false;
+			compilerconfig.Os = false;
+			compilerconfig.Oz = false;
+		}
+
+		else if (flag == "-O3") {
+			compilerconfig.O0 = false;
+			compilerconfig.O1 = false;
+			compilerconfig.O2 = false;
+			compilerconfig.O3 = true;
+			compilerconfig.Os = false;
+			compilerconfig.Oz = false;
+		}
+
+		else if (flag == "-Os") {
+			compilerconfig.O0 = false;
+			compilerconfig.O1 = false;
+			compilerconfig.O2 = false;
+			compilerconfig.O3 = false;
+			compilerconfig.Os = true;
+			compilerconfig.Oz = false;
+		}
+
+		else if (flag == "-Oz") {
+			compilerconfig.O0 = false;
+			compilerconfig.O1 = false;
+			compilerconfig.O2 = false;
+			compilerconfig.O3 = false;
+			compilerconfig.Os = false;
+			compilerconfig.Oz = true;
+		}
+
+		else if (flag == "-C") {
+			compilerconfig.C = true;
+			compilerconfig.LLVM = false;
+		}
+
+		else if (flag == "-LLVM") {
+			compilerconfig.C = false;
+			compilerconfig.LLVM = true;
 		}
 
 		else if (flag == "-ansi-off" || flag == "-color-off") {
@@ -128,7 +218,7 @@ prism::ArgReader::ArgReader(int argc, char* argv[], CompilerConfig& compilerconf
 			compilerconfig.utf8 = true;
 		}
 
-		else if (!flag.starts_with("-")) {
+		else if (!flag.starts_with('-')) {
 			if (std::filesystem::is_directory(flag)) {
 				errno = EISDIR;
 			}
@@ -140,13 +230,8 @@ prism::ArgReader::ArgReader(int argc, char* argv[], CompilerConfig& compilerconf
 			else if (!flag.ends_with(".prism")) {
 				ErrorHandler errorhandler;
 				errorhandler.log(ERROR_NOT_DOT_PRISM, compilerconfig, flag);
-			} else {
-				ErrorHandler errorhandler;
-				errorhandler.log(err::ERROR_INVALID_COMMAND, compilerconfig, flag);
 			}
-		}
-
-		else {
+		} else {
 			ErrorHandler errorhandler;
 			errorhandler.log(err::ERROR_INVALID_COMMAND, compilerconfig, flag);
 		}

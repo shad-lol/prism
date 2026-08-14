@@ -28,6 +28,7 @@
 #include "include/parser/parser.hpp"
 #include "include/polariton_ir/pir_builder.hpp"
 #include "include/codegen/codegen.hpp"
+#include "include/backend/backend.hpp"
 
 int main(int argc, char* argv[]) {
 
@@ -40,6 +41,7 @@ int main(int argc, char* argv[]) {
 
 	for (size_t i = 0; i < argreader.filecount(); i++) {
 		compilerconfig.filepath = argreader.file(i);
+		compilerconfig.filedir = compilerconfig.filepath.parent_path();
 
 		prism::PrismReader prismreader(compilerconfig);
 		prism::Lexer lexer(prismreader.get(), compilerconfig);
@@ -49,5 +51,9 @@ int main(int argc, char* argv[]) {
 		prism::PIRBuilder pirbuilder(parser.get(), compilerconfig);
 
 		prism::CodeGen codegen(pirbuilder.get(), compilerconfig);
+
+		prism::Backend backend(codegen.get(), compilerconfig);
 	}
+
+	return 0;
 }

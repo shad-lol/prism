@@ -62,7 +62,10 @@ namespace prism {
 		INFO_PIR_DUMP =              0x90000400,
 		ERROR_NOT_PINST =            0xE0000401,
 
-		INFO_C_DUMP =                0x90000500
+		INFO_C_DUMP =                0x90000500,
+
+		INFO_CMD_DUMP =              0x90000600,
+		ERROR_NO_CLANG =             0x90000601
 	};
 
 	class ErrorHandler {
@@ -105,6 +108,9 @@ namespace prism {
 			{err::ERROR_NOT_PINST, "$instruction is not a Polariton instruction"},
 
 			{err::INFO_C_DUMP, "$filepath:\n\n$C"},
+
+			{err::INFO_CMD_DUMP, "$filepath:\n\n$cmd"},
+			{err::ERROR_NO_CLANG, "couldn't launch clang."}
 		};
 
 		void execute_log(err error_code, CompilerConfig compilerconfig, const std::vector<std::string>& args);

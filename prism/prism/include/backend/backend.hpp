@@ -16,41 +16,13 @@
 
 #pragma once
 
-#include <cstdint>
-#include <string>
-#include <filesystem>
+#include "include/compiler_config/compiler_config.hpp"
 
 namespace prism {
 
-	struct CompilerConfig {
-		std::string appname;
-
-		std::filesystem::path filepath;
-		std::filesystem::path filedir;
-		int filecount = 0;
-
-		bool dump_source = false;
-		bool dump_tokens = false;
-		bool dump_ast = false;
-		bool dump_pir = false;
-		bool dump_c = false;
-		bool dump_llvm = false;
-		bool dump_cmd = false;
-
-		bool ansi = true;
-		bool utf8 = true;
-
-		bool O0 = true;
-		bool O1 = false;
-		bool O2 = false;
-		bool O3 = false;
-		bool Os = false;
-		bool Oz = false;
-
-		bool generate_obj = false;
-
-		bool C = true;
-		bool LLVM = false;
+	class Backend {
+	public:
+		Backend(const std::string& ccode, const CompilerConfig& compilerconfig);
 	};
 
 }
