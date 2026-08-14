@@ -59,7 +59,10 @@ namespace prism {
 		SYNTAX_PAREN_NOT_CLOSED =    0xC0000305,
 		SYNTAX_BRACES_NOT_CLOSED =   0xC0000306,
 
-		INFO_PIR_DUMP =              0x90000400
+		INFO_PIR_DUMP =              0x90000400,
+		ERROR_NOT_PINST =            0xE0000401,
+
+		INFO_C_DUMP =                0x90000500
 	};
 
 	class ErrorHandler {
@@ -98,7 +101,10 @@ namespace prism {
 			{err::SYNTAX_PAREN_NOT_CLOSED, "parentheses not closed."},
 			{err::SYNTAX_BRACES_NOT_CLOSED, "curly braces not closed."},
 
-			{err::INFO_PIR_DUMP, "$filepath:\n\n$ir"}
+			{err::INFO_PIR_DUMP, "$filepath:\n\n$ir"},
+			{err::ERROR_NOT_PINST, "$instruction is not a Polariton instruction"},
+
+			{err::INFO_C_DUMP, "$filepath:\n\n$C"},
 		};
 
 		void execute_log(err error_code, CompilerConfig compilerconfig, const std::vector<std::string>& args);

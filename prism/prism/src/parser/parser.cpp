@@ -15,7 +15,6 @@
  */
 
 #include "include/parser/parser.hpp"
-#include "include/logger/logger.hpp"
 
 #include <iostream>
 

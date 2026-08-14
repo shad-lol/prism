@@ -20,7 +20,7 @@
 
 namespace prism {
 
-	enum PIRinstruction {
+	enum PIRInstruction {
 		FUNC_START,
 		FUNC_END,
 		ARG_START,
@@ -28,6 +28,7 @@ namespace prism {
 		BODY_START,
 		BODY_END,
 
+		VOID,
 		ENTRY,
 
 		IDENTIF,

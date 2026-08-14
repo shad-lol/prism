@@ -16,26 +16,27 @@
 
 #pragma once
 
-#include "pir_instruction.hpp"
-#include "include/parser/node.hpp"
 #include "include/compiler_config/compiler_config.hpp"
 
-#include <vector>
+#include "include/polariton_ir/pir_instruction.hpp"
+
 #include <string>
+#include <vector>
 #include <variant>
 
 namespace prism {
 
-	class PIRBuilder {
-	private:
-		std::vector<std::variant<prism::PIRInstruction, int, long long, float, double, std::string>> PIRStream;
+	class CodeGen {
+		private:
+			CompilerConfig compilerconfig;
+			std::vector<std::variant<prism::PIRInstruction, int, long long, float, double, std::string>> PIRStream;
+			std::string Ccode = "[78, 201, 176]";
 
-	public:
-		PIRBuilder(const Node& root, const CompilerConfig& compilerconfig);
+		public:
+			CodeGen(std::vector<std::variant<prism::PIRInstruction, int, long long, float, double, std::string>> PIRStream, const CompilerConfig& compilerconfig);
 
-		void generatePIR(const Node& node, const CompilerConfig& compilerconfig);
-
-		std::vector<std::variant<prism::PIRInstruction, int, long long, float, double, std::string>> get() { return PIRStream; }
+			void C();
+			void LLVM();
 	};
 
 }

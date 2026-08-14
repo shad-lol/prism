@@ -29,9 +29,13 @@ namespace prism {
 		bool dump_tokens = false;
 		bool dump_ast = false;
 		bool dump_pir = false;
+		bool dump_c = false;
 
 		bool ansi = true;
 		bool utf8 = true;
+
+		bool C = true;
+		bool LLVM = false;
 	};
 
 }

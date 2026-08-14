@@ -158,6 +158,7 @@
     <ClCompile Include="prism\include\polariton_ir\pir_builder.hpp" />
     <ClCompile Include="prism\main.cpp" />
     <ClCompile Include="prism\src\.prism_reader\.prism_reader.cpp" />
+    <ClCompile Include="prism\src\codegen\codegen.cpp" />
     <ClCompile Include="prism\src\logger\logger.cpp" />
     <ClCompile Include="prism\src\error_handler\error_handler.cpp" />
     <ClCompile Include="prism\src\arg_reader\arg_reader.cpp" />
@@ -167,6 +168,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="prism\include\.prism_reader\.prism_reader.hpp" />
+    <ClInclude Include="prism\include\codegen\codegen.hpp" />
     <ClInclude Include="prism\include\compiler_config\compiler_config.hpp" />
     <ClInclude Include="prism\include\lexer\token.hpp" />
     <ClInclude Include="prism\include\logger\logger.hpp" />

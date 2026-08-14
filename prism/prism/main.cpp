@@ -16,18 +16,10 @@
 
 #ifdef _WIN32
 	#include <Windows.h>
-
-	#ifdef ERROR
-		#undef ERROR
-	#endif
-
-	#ifdef ERROR_FILE_NOT_FOUND
-		#undef ERROR_FILE_NOT_FOUND
-	#endif
-
-	#ifdef ERROR_INVALID_TOKEN
-		#undef ERROR_INVALID_TOKEN
-	#endif
+	#undef ERROR
+	#undef ERROR_FILE_NOT_FOUND
+	#undef ERROR_INVALID_TOKEN
+	#undef VOID
 #endif
 
 #include "include/arg_reader/arg_reader.hpp"
@@ -35,6 +27,7 @@
 #include "include/lexer/lexer.hpp"
 #include "include/parser/parser.hpp"
 #include "include/polariton_ir/pir_builder.hpp"
+#include "include/codegen/codegen.hpp"
 
 int main(int argc, char* argv[]) {
 
@@ -50,7 +43,11 @@ int main(int argc, char* argv[]) {
 
 		prism::PrismReader prismreader(compilerconfig);
 		prism::Lexer lexer(prismreader.get(), compilerconfig);
+
 		prism::Parser parser(lexer.get(), compilerconfig);
-		prism::PIRBuilder(parser.get(), compilerconfig);
+
+		prism::PIRBuilder pirbuilder(parser.get(), compilerconfig);
+
+		prism::CodeGen codegen(pirbuilder.get(), compilerconfig);
 	}
 }

@@ -78,11 +78,20 @@ prism::ArgReader::ArgReader(int argc, char* argv[], CompilerConfig& compilerconf
 			compilerconfig.dump_pir = true;
 		}
 
+		else if (flag == "-dump-C-off") {
+			compilerconfig.dump_c = false;
+		}
+
+		else if (flag == "-dump-C-on") {
+			compilerconfig.dump_c = true;
+		}
+
 		else if (flag == "-dump-all-off") {
 			compilerconfig.dump_source = false;
 			compilerconfig.dump_tokens = false;
 			compilerconfig.dump_ast = false;
 			compilerconfig.dump_pir = false;
+			compilerconfig.dump_c = false;
 		}
 
 		else if (flag == "-doll" || flag == "-dump-all-on") {
@@ -90,6 +99,7 @@ prism::ArgReader::ArgReader(int argc, char* argv[], CompilerConfig& compilerconf
 			compilerconfig.dump_tokens = true;
 			compilerconfig.dump_ast = true;
 			compilerconfig.dump_pir = true;
+			compilerconfig.dump_c = true;
 		}
 
 		else if (flag == "-ansi-off" || flag == "-color-off") {
