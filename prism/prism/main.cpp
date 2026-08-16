@@ -23,10 +23,15 @@
 #endif
 
 #include "include/arg_reader/arg_reader.hpp"
+
 #include "include/.prism_reader/.prism_reader.hpp"
 #include "include/lexer/lexer.hpp"
+
 #include "include/parser/parser.hpp"
+
 #include "include/polariton_ir/pir_builder.hpp"
+#include "include/polariton_ir/pir_analyzer.hpp"
+
 #include "include/codegen/codegen.hpp"
 #include "include/backend/backend.hpp"
 
@@ -51,7 +56,6 @@ int main(int argc, char* argv[]) {
 		prism::PIRBuilder pirbuilder(parser.get(), compilerconfig);
 
 		prism::CodeGen codegen(pirbuilder.get(), compilerconfig);
-
 		prism::Backend backend(codegen.get(), compilerconfig);
 	}
 

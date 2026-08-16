@@ -1,9 +1,0 @@
-entry main() {
-	alt answer 42; // now everywhere the word answer means 42 (note: this is NOT variable declaration, this is a macro)
-
-	if (answer == 42) {
-		return 0; // no errors
-	} else {
-		return 1; // error
-	}
-}

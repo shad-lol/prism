@@ -70,6 +70,18 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -165,12 +177,14 @@
     <ClCompile Include="prism\src\arg_reader\arg_reader.cpp" />
     <ClCompile Include="prism\src\lexer\lexer.cpp" />
     <ClCompile Include="prism\src\parser\parser.cpp" />
+    <ClCompile Include="prism\src\polariton_ir\pir_analyzer.cpp" />
     <ClCompile Include="prism\src\polariton_ir\pir_builder.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="prism\src\polariton_ir\pir_unit.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="prism\include\.prism_reader\.prism_reader.hpp" />
@@ -184,11 +198,10 @@
     <ClInclude Include="prism\include\lexer\lexer.hpp" />
     <ClInclude Include="prism\include\parser\parser.hpp" />
     <ClInclude Include="prism\include\parser\node.hpp" />
+    <ClInclude Include="prism\include\polariton_ir\pir_analyzer.hpp" />
     <ClInclude Include="prism\include\polariton_ir\pir_instruction.hpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="examples\01_the_basics.prism" />
-    <None Include="examples\02_alt_and_if.prism" />
+    <ClInclude Include="prism\include\polariton_ir\pir_type.hpp" />
+    <ClInclude Include="prism\include\polariton_ir\pir_unit.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

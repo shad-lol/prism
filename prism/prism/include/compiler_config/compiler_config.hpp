@@ -47,6 +47,7 @@ namespace prism {
 		bool Os = false;
 		bool Oz = false;
 
+		bool generate_exe = true;
 		bool generate_obj = false;
 
 		bool C = true;

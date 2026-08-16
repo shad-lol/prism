@@ -1,3 +1,0 @@
-entry MyExampleMainFunction { // You can call your main entry function anything you want!
-	return 42;
-}

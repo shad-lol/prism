@@ -18,6 +18,8 @@
 
 #include "include/error_handler/error_handler.hpp"
 
+#include <iostream>
+
 prism::Backend::Backend(const std::string& ccode, const CompilerConfig& compilerconfig) {
 	if (compilerconfig.C) {
 		std::string opt;
@@ -29,29 +31,54 @@ prism::Backend::Backend(const std::string& ccode, const CompilerConfig& compiler
 		if (compilerconfig.Os) opt = "-Os";
 		if (compilerconfig.Oz) opt = "-Oz";
 
-		std::filesystem::path exe_path = compilerconfig.filedir / (compilerconfig.appname + ".exe");
-		std::string cmd;
-
 		if (compilerconfig.generate_obj) {
 			std::filesystem::path obj_path = compilerconfig.filedir / (compilerconfig.appname + ".obj");
-			cmd = "clang -x c " + opt + " -c - -o \"" + obj_path.string() + "\" && clang \"" + obj_path.string() + "\" -o \"" + exe_path.string() + "\"";
+			std::string obj_cmd = "clang -x c " + opt + " -c - -o \"" + obj_path.string() + "\"\n";
+
+			if (compilerconfig.dump_cmd) {
+				ErrorHandler errorhandler;
+				errorhandler.log(err::INFO_CMD_DUMP, compilerconfig, compilerconfig.filepath, obj_cmd);
+			}
+
+			FILE* pipe = _popen(obj_cmd.c_str(), "w");
+			if (pipe) {
+				std::fwrite(ccode.c_str(), 1, ccode.length(), pipe);
+				_pclose(pipe);
+			}
+			else {
+				ErrorHandler errorhandler;
+				errorhandler.log(err::ERROR_NO_CLANG, compilerconfig);
+			}
 		}
-		else cmd = "clang -x c " + opt + " - -o \"" + exe_path.string() + "\"";
 
-		if (compilerconfig.dump_cmd) {
-			ErrorHandler errorhandler;
-			errorhandler.log(err::INFO_CMD_DUMP, compilerconfig, compilerconfig.filepath, cmd);
+		if (compilerconfig.generate_exe) {
+			std::filesystem::path exe_path = compilerconfig.filedir / (compilerconfig.appname + ".exe");
+			std::string exe_cmd;
+
+			if (compilerconfig.generate_obj) {
+				std::filesystem::path obj_path = compilerconfig.filedir / (compilerconfig.appname + ".obj");
+				exe_cmd = "clang \"" + obj_path.string() + "\" -o \"" + exe_path.string() + "\"";
+			}
+			else {
+				exe_cmd = "clang -x c " + opt + " - -o \"" + exe_path.string() + "\"\n";
+			}
+
+			if (compilerconfig.dump_cmd) {
+				ErrorHandler errorhandler;
+				errorhandler.log(err::INFO_CMD_DUMP, compilerconfig, compilerconfig.filepath, exe_cmd);
+			}
+
+			FILE* pipe = _popen(exe_cmd.c_str(), "w");
+			if (pipe) {
+				if (!compilerconfig.generate_obj) {
+					std::fwrite(ccode.c_str(), 1, ccode.length(), pipe);
+				}
+				_pclose(pipe);
+			}
+			else {
+				ErrorHandler errorhandler;
+				errorhandler.log(err::ERROR_NO_CLANG, compilerconfig);
+			}
 		}
-
-		FILE* pipe = _popen((cmd).c_str(), "w");
-
-		if (pipe) {
-			std::fwrite(ccode.c_str(), 1, ccode.length(), pipe);
-			_pclose(pipe);
-		} else {
-			ErrorHandler errorhandler;
-			errorhandler.log(err::ERROR_NO_CLANG, compilerconfig);
-		}
-
 	}
 }

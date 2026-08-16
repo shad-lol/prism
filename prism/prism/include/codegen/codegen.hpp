@@ -17,8 +17,8 @@
 #pragma once
 
 #include "include/compiler_config/compiler_config.hpp"
-
 #include "include/polariton_ir/pir_instruction.hpp"
+#include "include/polariton_ir/pir_unit.hpp"
 
 #include <string>
 #include <vector>
@@ -27,17 +27,17 @@
 namespace prism {
 
 	class CodeGen {
-		private:
-			std::vector<std::variant<prism::PIRInstruction, int, long long, float, double, std::string>> PIRStream;
-			std::string Ccode;
+	private:
+		std::vector<PIRUnit> PIRStream;
+		std::string Ccode;
 
-		public:
-			CodeGen(std::vector<std::variant<prism::PIRInstruction, int, long long, float, double, std::string>> PIRStream, CompilerConfig& compilerconfig);
+	public:
+		CodeGen(std::vector<PIRUnit> PIRStream, CompilerConfig& compilerconfig);
 
-			void C(CompilerConfig& compilerconfig);
-			void LLVM(CompilerConfig& compilerconfig);
+		void C(std::vector<PIRUnit> PIRStream, CompilerConfig& compilerconfig);
+		void LLVM(std::vector<PIRUnit> PIRStream, CompilerConfig& compilerconfig);
 
-			std::string get() { return Ccode; }
+		std::string get() { return Ccode; }
 	};
 
 }

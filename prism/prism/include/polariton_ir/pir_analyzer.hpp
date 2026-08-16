@@ -16,25 +16,19 @@
 
 #pragma once
 
-#include "pir_unit.hpp"
-#include "include/parser/node.hpp"
+#include "pir_instruction.hpp"
 #include "include/compiler_config/compiler_config.hpp"
+#include "pir_unit.hpp"
 
 #include <vector>
+#include <variant>
 #include <string>
 
 namespace prism {
 
-	class PIRBuilder {
-	private:
-		std::vector<PIRUnit> PIRStream;
-
+	class PIRAnalyzer {
 	public:
-		PIRBuilder(const Node& root, const CompilerConfig& compilerconfig);
-
-		void generatePIR(const Node& node, const CompilerConfig& compilerconfig);
-
-		std::vector<PIRUnit> get() { return PIRStream; }
+		PIRAnalyzer(const std::vector<PIRUnit>& PIRStream, const CompilerConfig& compilerconfig);
 	};
 
 }

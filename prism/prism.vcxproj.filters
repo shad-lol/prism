@@ -48,6 +48,12 @@
     <ClCompile Include="prism\src\backend\backend.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="prism\src\polariton_ir\pir_analyzer.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="prism\src\polariton_ir\pir_unit.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="prism\include\.prism_reader\.prism_reader.hpp">
@@ -86,9 +92,14 @@
     <ClInclude Include="prism\include\backend\backend.hpp">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="examples\01_the_basics.prism" />
-    <None Include="examples\02_alt_and_if.prism" />
+    <ClInclude Include="prism\include\polariton_ir\pir_analyzer.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="prism\include\polariton_ir\pir_unit.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="prism\include\polariton_ir\pir_type.hpp">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

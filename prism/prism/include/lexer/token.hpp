@@ -21,7 +21,7 @@
 
 namespace prism {
 
-	enum TokenType {
+	enum class TokenType {
 		EOFILE,
 
 		KEYWORD_ENTRY,

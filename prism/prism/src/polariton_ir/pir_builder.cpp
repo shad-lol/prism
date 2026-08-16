@@ -24,52 +24,14 @@ prism::PIRBuilder::PIRBuilder(const Node& root, const CompilerConfig& compilerco
 	generatePIR(root, compilerconfig);
 
 	if (compilerconfig.dump_pir) {
-		std::ostringstream dump;
+		std::string dump;
 		for (size_t i = 0; i < PIRStream.size(); i++) {
-			const auto& item = PIRStream[i];
-
-			std::string raw_value = "";
-			bool is_instruction = false;
-
-			std::visit([&raw_value, &is_instruction](auto&& arg) {
-				using T = std::decay_t<decltype(arg)>;
-
-                if constexpr (std::is_same_v<T, prism::PIRInstruction>) is_instruction = true;
-                else if constexpr (std::is_same_v<T, std::string>) raw_value = arg;
-                else raw_value = std::to_string(arg);
-			}, item);
-
-			if (is_instruction) {
-				prism::PIRInstruction inst = std::get<prism::PIRInstruction>(item);
-                switch (inst) {
-					case prism::PIRInstruction::FUNC_START:  raw_value = "FUNC_START"; break;
-					case prism::PIRInstruction::FUNC_END:    raw_value = "FUNC_END"; break;
-					case prism::PIRInstruction::ARG_START:   raw_value = "ARG_START"; break;
-					case prism::PIRInstruction::ARG_END:     raw_value = "ARG_END"; break;
-					case prism::PIRInstruction::BODY_START:  raw_value = "BODY_START"; break;
-					case prism::PIRInstruction::BODY_END:    raw_value = "BODY_END"; break;
-
-					case prism::PIRInstruction::VOID:        raw_value = "VOID"; break;
-					case prism::PIRInstruction::ENTRY:       raw_value = "ENTRY"; break;
-
-					case prism::PIRInstruction::IDENTIF:     raw_value = "IDENTIF"; break;
-
-					case prism::PIRInstruction::INT:         raw_value = "INT"; break;
-					case prism::PIRInstruction::LL:          raw_value = "LL"; break;
-					case prism::PIRInstruction::FLOAT:       raw_value = "FLOAT"; break;
-					case prism::PIRInstruction::DOUBLE:      raw_value = "DOUBLE"; break;
-
-					case prism::PIRInstruction::RET:         raw_value = "RET"; break;
-
-					default:                                 raw_value = "???"; break;
-                }
-            }
-
-            dump << "[30, 167, 69](" << i << "):\t\t [] [93, 101, 156]Instruction: [][78, 201, 176]" << raw_value << "[]\n";
+			std::string value = PIRStream[i].get_value_str();
+            dump += "[30, 167, 69](" + std::to_string(i) + "):\t\t [] [93, 101, 156]Instruction: [][78, 201, 176]" + value + "[]\n";
         }
 
         ErrorHandler errorhandler;
-        errorhandler.log(INFO_PIR_DUMP, compilerconfig, compilerconfig.filepath, dump.str());
+        errorhandler.log(INFO_PIR_DUMP, compilerconfig, compilerconfig.filepath, dump);
     }
 }
 
@@ -82,7 +44,7 @@ void prism::PIRBuilder::generatePIR(const Node& node, const CompilerConfig& comp
 			break;
 
 		case TokenType::KEYWORD_ENTRY:
-			PIRStream.push_back(PIRInstruction::ENTRY);
+			PIRStream.push_back(PIRType::ENTRY);
 			break;
 
 		case TokenType::FUNC_ARGUEMENTS:
@@ -103,27 +65,27 @@ void prism::PIRBuilder::generatePIR(const Node& node, const CompilerConfig& comp
 			break;
 
 		case TokenType::IDENTIFIER:
-			PIRStream.push_back(PIRInstruction::IDENTIF);
+			PIRStream.push_back(PIRType::IDENTIFIER);
 			PIRStream.push_back(node.value.lexeme);
 			break;
 
 		case TokenType::LITERAL_INT:
-			PIRStream.push_back(PIRInstruction::INT);
+			PIRStream.push_back(PIRType::INT);
 			PIRStream.push_back(std::get<int>(node.value.value));
 			break;
 
 		case TokenType::LITERAL_LL:
-			PIRStream.push_back(PIRInstruction::LL);
+			PIRStream.push_back(PIRType::LONG_LONG);
 			PIRStream.push_back(std::get<long long>(node.value.value));
 			break;
 
 		case TokenType::LITERAL_FLOAT:
-			PIRStream.push_back(PIRInstruction::FLOAT);
+			PIRStream.push_back(PIRType::FLOAT);
 			PIRStream.push_back(std::get<float>(node.value.value));
 			break;
 
 		case TokenType::LITERAL_DOUBLE:
-			PIRStream.push_back(PIRInstruction::DOUBLE);
+			PIRStream.push_back(PIRType::DOUBLE);
 			PIRStream.push_back(std::get<double>(node.value.value));
 			break;
 

@@ -20,42 +20,41 @@
 
 #include <iostream>
 
-prism::CodeGen::CodeGen(std::vector<std::variant<prism::PIRInstruction, int, long long, float, double, std::string>> PIRStream, CompilerConfig& compilerconfig) {
-	this->PIRStream = PIRStream;
-
-	if (compilerconfig.C) C(compilerconfig);
-	if (compilerconfig.LLVM) LLVM(compilerconfig);
+prism::CodeGen::CodeGen(std::vector<PIRUnit> PIRStream, CompilerConfig& compilerconfig) {
+	if (compilerconfig.C) C(PIRStream, compilerconfig);
+	if (compilerconfig.LLVM) LLVM(PIRStream, compilerconfig);
 }
 
-void prism::CodeGen::C(CompilerConfig& compilerconfig) {
+void prism::CodeGen::C(std::vector<PIRUnit> PIRStream, CompilerConfig& compilerconfig) {
 	std::string entryfunc_name;
 		
 	for (size_t i = 0; i < PIRStream.size(); i++) {
-		const auto& pinsti = PIRStream[i];
-        if (!std::holds_alternative<PIRInstruction>(pinsti)) {
-            std::stringstream data;
-            std::visit([&data](const auto& val) { data << val; }, pinsti);
+		PIRUnit pinsti = PIRStream[i];
+        if (!pinsti.is_pinst()) {
 			ErrorHandler errorhandler;
-			errorhandler.log(err::ERROR_NOT_PINST, compilerconfig, data.str());
+			errorhandler.log(err::ERROR_NOT_PINST, compilerconfig, pinsti.get_value_str());
         }
 
-		const auto& pinst = std::get<PIRInstruction>(pinsti);
+		PIRInstruction pinst = std::get<PIRInstruction>(pinsti.get());
 
 		switch (pinst) {
 			case PIRInstruction::FUNC_START: {
-				PIRInstruction returntype = std::get<PIRInstruction>(PIRStream[++i]); i += 2;
-				std::string funcidentifier = std::get<std::string>(PIRStream[i]);
+				PIRType returntype = std::get<PIRType>(PIRStream[++i].get()); i++;
+				std::string funcidentifier = std::get<std::string>(PIRStream[++i].get());
 
-				if (returntype == PIRInstruction::ENTRY) {
+				if (returntype == PIRType::ENTRY) {
 					entryfunc_name = funcidentifier;
 					compilerconfig.appname = funcidentifier;
 					Ccode += "int " + funcidentifier;
 				}
-				else if (returntype == PIRInstruction::VOID) {
+				else if (returntype == PIRType::VOID) {
 					Ccode += "void " + funcidentifier;
 				}
 				break;
 			}
+
+			case PIRInstruction::FUNC_END:
+				break;
 
 			case PIRInstruction::ARG_START:
 				Ccode += "(";
@@ -74,16 +73,16 @@ void prism::CodeGen::C(CompilerConfig& compilerconfig) {
 				break;
 
 			case PIRInstruction::RET:
-				i++;
+				i += 2;
 				std::stringstream value;
-				if (std::holds_alternative<int>(PIRStream[++i])) {
-					value << std::get<int>(PIRStream[i]);
-				} else if (std::holds_alternative<long long>(PIRStream[++i])) {
-					value << std::get<long long>(PIRStream[i]) << "LL";
-				} else if (std::holds_alternative<float>(PIRStream[++i])) {
-					value << std::get<float>(PIRStream[i]) << "f";
-				} else if (std::holds_alternative<double>(PIRStream[++i])) {
-					value << std::get<double>(PIRStream[i]);
+				if (PIRStream[i].is_int()) {
+					value << std::get<int>(PIRStream[i].get());
+				} else if (PIRStream[i].is_long_long()) {
+					value << std::get<long long>(PIRStream[i].get()) << "LL";
+				} else if (PIRStream[i].is_float()) {
+					value << std::get<float>(PIRStream[i].get()) << "f";
+				} else if (PIRStream[i].is_double()) {
+					value << std::get<double>(PIRStream[i].get());
 				}
 
 				Ccode += "return " + value.str() + ";";
@@ -98,6 +97,6 @@ void prism::CodeGen::C(CompilerConfig& compilerconfig) {
 	}
 }
 
-void prism::CodeGen::LLVM(CompilerConfig& compilerconfig) {
+void prism::CodeGen::LLVM(std::vector<PIRUnit> PIRStream, CompilerConfig& compilerconfig) {
 
 }

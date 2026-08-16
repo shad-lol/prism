@@ -120,6 +120,14 @@ prism::ArgReader::ArgReader(int argc, char* argv[], CompilerConfig& compilerconf
 			compilerconfig.dump_cmd = true;
 		}
 
+		else if (flag == "-generate-exe-off") {
+			compilerconfig.generate_exe = false;
+		}
+
+		else if (flag == "-generate-exe-on" || flag == "-generate-exe") {
+			compilerconfig.generate_exe = true;
+		}
+
 		else if (flag == "-generate-obj-off") {
 			compilerconfig.generate_obj = false;
 		}
