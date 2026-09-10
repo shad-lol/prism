@@ -14,16 +14,4 @@
  *   limitations under the License.
  */
 
-#include <prismc>
-
-#include <iostream>
-	
-int main() {
-	prismc::register_codes();
-
-	prismc::File code;
-	if (code.load("C:/Users/user/Desktop/material/test/src/test.prism") == prismc::err::ERR) return 1;
-	std::cout << code.get_code();
-
-	return 0;
-}
+#include <lexer/lexer.hpp>

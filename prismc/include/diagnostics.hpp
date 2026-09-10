@@ -35,11 +35,11 @@ namespace prismc {
         void register_code(uint32_t hex_code, std::string_view text_template) { registry[hex_code] = std::string(text_template); }
 
         template<typename... Args>
-        void log(uint32_t hex_code, Args&&... args) const {
+        uint16_t log(uint16_t hex_code, Args&&... args) const {
             auto it = registry.find(hex_code);
             if (it == registry.end()) {
-                std::println(std::cerr, "\033[38;2;255;0;0m[Diagnostics Error] Unknown code: 0x{:08X}\033[0m", hex_code);
-                return;
+                std::println(std::cerr, "\033[38;2;255;0;0m[Diagnostics Error] Unknown code: 0x{:04X}\033[0m", hex_code);
+                std::exit(0x0000);
             }
 
             std::string text = replace_variables(it->second);
@@ -53,17 +53,27 @@ namespace prismc {
 
             message = parse_colors(message) + "\033[0m\n";
 
-            uint8_t severity = (hex_code >> 12) & 0x0F;
+            uint8_t severity = hex_code >> 12;
 
             if (severity == 0) {
                 std::println(std::cout, "{}", message);
-                return;
+                return 0x0000;
             }
 
             std::string prefix = generate_prefix(severity, hex_code);
             std::ostream& os = (severity == 0xE || severity == 0xF) ? std::cerr : std::cout;
 
             std::println(os, "{}{}", prefix, message);
+
+            switch (severity) {
+                case 0x0: return 0x0000;
+                case 0x1: return 0x1000;
+                case 0x9: return 0x9000;
+                case 0xA: return 0xA000;
+                case 0xE: return 0xE000;
+                case 0xF: return 0xF000;
+                default: return 0x0000;
+            }
         }
 
     private:
@@ -135,11 +145,11 @@ namespace prismc {
             std::string color;
 
             switch (severity) {
-                case 0x1: name = "success";     color = "[0, 255, 0]";   break;
+                case 0x1: name = "success";     color = "[34, 206, 91]";   break;
                 case 0x9: name = "info";        color = "[0, 190, 255]"; break;
-                case 0xA: name = "warning";     color = "[255, 165, 0]"; break;
-                case 0xE: name = "error";       color = "[255, 0, 0]";   break;
-                case 0xF: name = "fatal error"; color = "[255, 0, 0]";   break;
+                case 0xA: name = "warning";     color = "[249, 107, 6]"; break;
+                case 0xE: name = "error";       color = "[238, 43, 43]";   break;
+                case 0xF: name = "fatal error"; color = "[189, 15, 15]";   break;
                 default:  name = "unknown";     color = "[128, 128, 128]"; break;
             }
 

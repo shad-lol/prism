@@ -18,6 +18,7 @@ set(SOURCES
     src/prismc.cpp
 
     src/file/file.cpp
+    src/lexer/lexer.cpp
 )
 
 add_library(prismc SHARED ${SOURCES})

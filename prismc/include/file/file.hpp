@@ -29,9 +29,10 @@ namespace prismc {
 
 	public:
 		File() = default;
-		explicit File(const fs::path& path);
 
-		[[nodiscard]] constexpr const fs::path& get_path() const noexcept { return path; }
+		uint16_t load(const fs::path& path);
+
+		[[nodiscard]] constexpr const fs::path& get_path() const noexcept    { return path; }
 		[[nodiscard]] constexpr const std::string& get_code() const noexcept { return code; }
 
 	private:

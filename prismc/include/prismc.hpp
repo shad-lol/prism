@@ -15,3 +15,4 @@
  */
 
 #include <file/file.hpp>
+#include <lexer/lexer.hpp>

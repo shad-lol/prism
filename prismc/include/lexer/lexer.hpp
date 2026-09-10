@@ -14,16 +14,31 @@
  *   limitations under the License.
  */
 
-#include <prismc>
+#pragma once
 
-#include <iostream>
-	
-int main() {
-	prismc::register_codes();
+#include <global.hpp>
 
-	prismc::File code;
-	if (code.load("C:/Users/user/Desktop/material/test/src/test.prism") == prismc::err::ERR) return 1;
-	std::cout << code.get_code();
+#include <string>
 
-	return 0;
+namespace prismc {
+
+	class PRISMC_API Lexer {
+
+	public:
+		Lexer() = default;
+
+		[[nodiscard]] constexpr const std::string& get_code() const noexcept { return code; }
+		[[nodiscard]] constexpr const size_t& get_pos() const noexcept       { return pos; }
+		[[nodiscard]] constexpr const size_t& get_line() const noexcept      { return line; }
+		[[nodiscard]] constexpr const size_t& get_column() const noexcept    { return column; }
+
+	private:
+		std::string code;
+
+		size_t pos = 0;
+		size_t line = 1;
+		size_t column = 1;
+
+	};
+
 }
