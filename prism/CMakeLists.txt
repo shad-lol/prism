@@ -21,5 +21,4 @@ set(SOURCES
 add_executable(prism ${SOURCES})
 
 target_include_directories(prism PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/../dist/prism/include")
-
 target_link_libraries(prism PRIVATE prismc)

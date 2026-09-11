@@ -21,9 +21,10 @@
 int main() {
 	prismc::register_codes();
 
-	prismc::File code;
-	if (code.load("C:/Users/user/Desktop/material/test/src/test.prism") == prismc::err::ERR) return 1;
-	std::cout << code.get_code();
+	prismc::File file;
+	file.set_code("entry func test() {\n	return 42;\n}");
+
+	std::cout << file.get_code();
 
 	return 0;
 }

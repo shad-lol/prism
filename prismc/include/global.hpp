@@ -34,12 +34,10 @@
 
 #include <diagnostics.hpp>
 
-#include <cstdint>
-
 namespace prismc {
 
     namespace err {
-        enum type : std::uint16_t {
+        enum type : uint16_t {
 
             TXT = 0x0000,
             SUCCESS = 0x1000,

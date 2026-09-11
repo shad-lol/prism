@@ -34,6 +34,8 @@ namespace prismc {
 
 		[[nodiscard]] constexpr const fs::path& get_path() const noexcept    { return path; }
 		[[nodiscard]] constexpr const std::string& get_code() const noexcept { return code; }
+		constexpr void set_path(const fs::path& path) noexcept               { this->path = path; }
+		constexpr void set_code(const std::string& code) noexcept            { this->code = code; }
 
 	private:
 		fs::path path;
