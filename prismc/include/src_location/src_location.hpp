@@ -18,28 +18,25 @@
 
 #include <global.hpp>
 
-#include <filesystem>
-#include <string>
-
 namespace prismc {
 
-	namespace fs = std::filesystem;
+	struct SourceLocation {
 
-	class PRISMC_API File {
+		std::shared_ptr<std::string> filename;
+		size_t pos = 0;
+		size_t line = 1;
+		size_t column = 1;
 
-	public:
-		File() = default;
+		SourceLocation() = default;
 
-		uint16_t load(const fs::path& path);
+		SourceLocation(const std::string& filename, size_t pos, size_t line, size_t column)
+			: filename(std::make_shared<std::string>(filename)), pos(pos), line(line), column(column) {
+		}
 
-		[[nodiscard]] constexpr const fs::path& get_path() const noexcept { return path; }
-		[[nodiscard]] constexpr const std::string& get_code() const noexcept { return code; }
-		constexpr void set_path(const fs::path& path) noexcept { this->path = path; }
-		constexpr void set_code(const std::string& code) noexcept { this->code = code; }
-
-	private:
-		fs::path path;
-		std::string code;
+		std::string to_string() const {
+			if (!filename) return "unknown:" + std::to_string(line) + ":" + std::to_string(column);
+			return *filename + ":" + std::to_string(line) + ":" + std::to_string(column);
+		}
 
 	};
 

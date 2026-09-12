@@ -23,9 +23,9 @@ uint16_t prismc::File::load(const fs::path& path) {
 	file.open(path);
 
 	if (!file.is_open()) {
-		if (errno == ENOENT)      return diag.log(err::ERR_FILE_NOT_FOUND, path.string());
-		else if (errno == EACCES) return diag.log(err::ERR_ACCESS_DENIED, path.string());
-		else                      return diag.log(err::ERR_UNKNOWN_FILE_ERROR, path.string());
+		if (errno == ENOENT)      return diag.log(err::ErrFileNotFound, path.string());
+		else if (errno == EACCES) return diag.log(err::ErrAccessDenied, path.string());
+		else                      return diag.log(err::ErrUnknownFileError, path.string());
 	}
 
 	std::ostringstream buffer;
@@ -34,5 +34,5 @@ uint16_t prismc::File::load(const fs::path& path) {
 
 	code = buffer.str();
 
-	return err::SUCCESS;
+	return err::Success;
 }

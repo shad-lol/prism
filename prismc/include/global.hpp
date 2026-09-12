@@ -39,16 +39,16 @@ namespace prismc {
     namespace err {
         enum type : uint16_t {
 
-            TXT = 0x0000,
-            SUCCESS = 0x1000,
-            INFO = 0x9000,
-            WARN = 0xA000,
-            ERR = 0xE000,
-            FATAL = 0xF000,
+            Text = 0x0000,
+            Success = 0x1000,
+            Info = 0x9000,
+            Warn = 0xA000,
+            Err = 0xE000,
+            Fatal = 0xF000,
 
-            ERR_FILE_NOT_FOUND = 0xE100,
-            ERR_ACCESS_DENIED = 0xE101,
-            ERR_UNKNOWN_FILE_ERROR = 0xE102,
+            ErrFileNotFound = 0xE100,
+            ErrAccessDenied = 0xE101,
+            ErrUnknownFileError = 0xE102,
 
         };
     }
@@ -57,16 +57,16 @@ namespace prismc {
 
     inline void register_codes() {
 
-        diag.register_code(err::TXT, "text");
-        diag.register_code(err::SUCCESS, "success");
-        diag.register_code(err::INFO, "info");
-        diag.register_code(err::WARN, "warning");
-        diag.register_code(err::ERR, "error");
-        diag.register_code(err::FATAL, "fatal error");
+        diag.register_code(err::Text, "text");
+        diag.register_code(err::Success, "success");
+        diag.register_code(err::Info, "info");
+        diag.register_code(err::Warn, "warning");
+        diag.register_code(err::Err, "error");
+        diag.register_code(err::Fatal, "fatal error");
 
-        diag.register_code(err::ERR_FILE_NOT_FOUND, "failed to find file: [230, 192, 123]${filepath}[/].");
-        diag.register_code(err::ERR_ACCESS_DENIED, "access denied for file: [230, 192, 123]${filepath}[/].");
-        diag.register_code(err::ERR_UNKNOWN_FILE_ERROR, "could not open file [230, 192, 123]${filepath}[/] due to an unknown error.");
+        diag.register_code(err::ErrFileNotFound, "failed to find file: [230, 192, 123]${filepath}[/].");
+        diag.register_code(err::ErrAccessDenied, "access denied for file: [230, 192, 123]${filepath}[/].");
+        diag.register_code(err::ErrUnknownFileError, "could not open file [230, 192, 123]${filepath}[/] due to an unknown error.");
 
     }
 
