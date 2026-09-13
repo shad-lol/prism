@@ -19,6 +19,7 @@
 #include <global.hpp>
 
 #include "token.hpp"
+#include <file/file.hpp>
 
 #include <string>
 
@@ -29,19 +30,12 @@ namespace prismc {
 	public:
 		Lexer() = default;
 
-		std::vector<Token> lex(const std::string_view& code);
-
 		[[nodiscard]] constexpr const std::string& get_code() const noexcept { return code; }
-		[[nodiscard]] constexpr const size_t& get_pos() const noexcept { return pos; }
-		[[nodiscard]] constexpr const size_t& get_line() const noexcept { return line; }
-		[[nodiscard]] constexpr const size_t& get_column() const noexcept { return column; }
+		[[nodiscard]] constexpr const SourceLocation& get_location() const noexcept { return location; }
 
 	private:
 		std::string code;
-
-		size_t pos = 0;
-		size_t line = 1;
-		size_t column = 1;
+		SourceLocation location;
 
 	};
 

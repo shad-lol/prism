@@ -65,15 +65,7 @@ namespace prismc {
 
             std::println(os, "{}{}", prefix, message);
 
-            switch (severity) {
-                case 0x0: return 0x0000;
-                case 0x1: return 0x1000;
-                case 0x9: return 0x9000;
-                case 0xA: return 0xA000;
-                case 0xE: return 0xE000;
-                case 0xF: return 0xF000;
-                default: return 0x0000;
-            }
+            return hex_code;
         }
 
     private:

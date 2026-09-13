@@ -15,16 +15,30 @@
  */
 
 #include <prismc>
-
-#include <iostream>
 	
 int main() {
 	prismc::register_codes();
 
 	prismc::File file;
-	file.set_code("entry func test() {\n	return 42;\n}");
+	std::filesystem::path out = "C:/Users/user/Desktop/material/test/out/test/";
 
-	std::cout << file.get_code();
+	prismc::Lexer lexer;
+//	prismc::Parser parser;
+//	prismc::Backend backend;
+
+	auto loaded = file.load("C:/Users/user/Desktop/material/test/src/test.prism");
+	if (loaded != prismc::err::Success) return loaded;
+
+	std::vector<prismc::Token> token_stream;
+//	auto lexed = lexer.lex(file, &token_stream);
+//	if (lexed != prismc::err::Success) return lexed;
+
+//	prismc::Node ast;
+//	auto parsed = parser.parse(token_stream);
+//	if (parsed != prismc::err::Success) return parsed;
+
+//	auto compiled = backend.compile(ast, out);
+//	if (compiled != prismc::err::Success) return compiled;
 
 	return 0;
 }

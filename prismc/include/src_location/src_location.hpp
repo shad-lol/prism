@@ -22,15 +22,15 @@ namespace prismc {
 
 	struct SourceLocation {
 
-		std::shared_ptr<std::string> filename;
-		size_t pos = 0;
-		size_t line = 1;
-		size_t column = 1;
+		const std::string* filename;
+		uint32_t pos = 0;
+		uint16_t line = 1;
+		uint16_t column = 1;
 
 		SourceLocation() = default;
 
-		SourceLocation(const std::string& filename, size_t pos, size_t line, size_t column)
-			: filename(std::make_shared<std::string>(filename)), pos(pos), line(line), column(column) {
+		SourceLocation(const std::string* filename, size_t pos, size_t line, size_t column)
+			: filename(filename), pos(pos), line(line), column(column) {
 		}
 
 		std::string to_string() const {
