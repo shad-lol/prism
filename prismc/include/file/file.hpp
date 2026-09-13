@@ -20,25 +20,24 @@
 
 #include <filesystem>
 #include <string>
+#include <expected>
 
 namespace prismc {
-
-	namespace fs = std::filesystem;
 
 	class PRISMC_API File {
 
 	public:
 		File() = default;
 
-		uint16_t load(const fs::path& path);
+		std::expected<void, uint16_t> load(const std::filesystem::path& path);
 
-		[[nodiscard]] constexpr const fs::path& get_path() const noexcept { return path; }
+		[[nodiscard]] constexpr const std::filesystem::path& get_path() const noexcept { return path; }
 		[[nodiscard]] constexpr const std::string& get_code() const noexcept { return code; }
-		constexpr void set_path(const fs::path& path) noexcept { this->path = path; }
+		constexpr void set_path(const std::filesystem::path& path) noexcept { this->path = path; }
 		constexpr void set_code(const std::string& code) noexcept { this->code = code; }
 
 	private:
-		fs::path path;
+		std::filesystem::path path;
 		std::string code;
 
 	};

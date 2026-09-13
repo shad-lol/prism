@@ -164,9 +164,11 @@ namespace prismc {
 			return false;
 		}
 
-		std::string to_string() const {
+		std::expected<std::string, uint16_t> to_string() const {
 			File file;
-			file.load(*location.filename);
+			auto res = file.load(*location.filepath);
+			if (!res) return std::unexpected<uint16_t>(res.error());
+
 			std::string code = file.get_code();
 
 			return  static_cast<std::string>(prismc::to_string(type)) +

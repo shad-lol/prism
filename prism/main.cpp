@@ -26,19 +26,17 @@ int main() {
 //	prismc::Parser parser;
 //	prismc::Backend backend;
 
-	auto loaded = file.load("C:/Users/user/Desktop/material/test/src/test.prism");
-	if (loaded != prismc::err::Success) return loaded;
+	auto res = file.load("C:/Users/user/Desktop/material/test/src/test.prism");
+	if (!res) return res.error();
 
-	std::vector<prismc::Token> token_stream;
-//	auto lexed = lexer.lex(file, &token_stream);
-//	if (lexed != prismc::err::Success) return lexed;
+//	auto token_stream = lexer.lex(file);
+//	if (!token_stream) return token_stream.error();
 
-//	prismc::Node ast;
-//	auto parsed = parser.parse(token_stream);
-//	if (parsed != prismc::err::Success) return parsed;
+//	auto ast = parser.parse(token_stream);
+//	if (!ast) return ast.error();
 
-//	auto compiled = backend.compile(ast, out);
-//	if (compiled != prismc::err::Success) return compiled;
+//	auto res = backend.compile(ast, out);
+//	if (!res) return res.error();
 
 	return 0;
 }

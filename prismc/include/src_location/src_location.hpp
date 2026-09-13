@@ -17,25 +17,26 @@
 #pragma once
 
 #include <global.hpp>
+#include <filesystem>
 
 namespace prismc {
 
 	struct SourceLocation {
 
-		const std::string* filename;
+		const std::filesystem::path* filepath;
 		uint32_t pos = 0;
 		uint16_t line = 1;
 		uint16_t column = 1;
 
 		SourceLocation() = default;
 
-		SourceLocation(const std::string* filename, size_t pos, size_t line, size_t column)
-			: filename(filename), pos(pos), line(line), column(column) {
+		SourceLocation(const std::filesystem::path* filepath, size_t pos, size_t line, size_t column)
+			: filepath(filepath), pos(pos), line(line), column(column) {
 		}
 
 		std::string to_string() const {
-			if (!filename) return "unknown:" + std::to_string(line) + ":" + std::to_string(column);
-			return *filename + ":" + std::to_string(line) + ":" + std::to_string(column);
+			if (!filepath) return "unknown:" + std::to_string(line) + ":" + std::to_string(column);
+			return filepath->string() + ":" + std::to_string(line) + ":" + std::to_string(column);
 		}
 
 	};
