@@ -137,12 +137,13 @@ namespace prismc {
             std::string color;
 
             switch (severity) {
-                case 0x1: name = "success";     color = "[34, 206, 91]";   break;
-                case 0x9: name = "info";        color = "[0, 190, 255]"; break;
-                case 0xA: name = "warning";     color = "[249, 107, 6]"; break;
-                case 0xE: name = "error";       color = "[238, 43, 43]";   break;
-                case 0xF: name = "fatal error"; color = "[189, 15, 15]";   break;
-                default:  name = "unknown";     color = "[128, 128, 128]"; break;
+                case 0x1: name = "success";      color = "[34, 206, 91]";   break;
+                case 0x9: name = "info";         color = "[0, 190, 255]";   break;
+                case 0xA: name = "warning";      color = "[249, 107, 6]";   break;
+                case 0xE: name = "error";        color = "[238, 43, 43]";   break;
+                case 0xC: name = "syntax error"; color = "[233, 63, 37]";   break;
+                case 0xF: name = "fatal error";  color = "[189, 15, 15]";   break;
+                default:  name = "unknown";      color = "[128, 128, 128]"; break;
             }
 
             char buffer[16];

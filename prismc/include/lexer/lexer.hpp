@@ -22,6 +22,7 @@
 #include <file/file.hpp>
 
 #include <string>
+#include <vector>
 
 namespace prismc {
 
@@ -30,12 +31,41 @@ namespace prismc {
 	public:
 		Lexer() = default;
 
-		[[nodiscard]] constexpr const std::string& get_code() const noexcept { return code; }
-		[[nodiscard]] constexpr const SourceLocation& get_location() const noexcept { return location; }
+		std::expected<std::vector<Token>, uint16_t> lex(const File& file);
+
+		Token lex_identifier_or_keyword();
+		std::expected<Token, bool> lex_string();
+		Token lex_number();
+
+		bool skip();
+
+		void skip_whitespace();
+		void skip_comment();
+		bool skip_multiline_comment();
+
+		char peek() const;
+		char next() const;
+
+		char advance();
 
 	private:
-		std::string code;
+		std::string_view code;
 		SourceLocation location;
+
+		inline static const std::unordered_map<std::string_view, TokenType> keywords = {
+			{"let", TokenType::KwLet},
+			{"set", TokenType::KwSet},
+			{"func", TokenType::KwFunc},
+			{"entry", TokenType::KwEntry},
+			{"return", TokenType::KwReturn},
+			{"if", TokenType::KwIf},
+			{"else", TokenType::KwElse},
+			{"while", TokenType::KwWhile},
+			{"struct", TokenType::KwStruct},
+			{"import", TokenType::KwImport},
+			{"true", TokenType::BoolLiteral},
+			{"false", TokenType::BoolLiteral}
+		};
 
 	};
 

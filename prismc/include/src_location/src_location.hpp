@@ -34,9 +34,11 @@ namespace prismc {
 			: filepath(filepath), pos(pos), line(line), column(column) {
 		}
 
-		std::string to_string() const {
-			if (!filepath) return "unknown:" + std::to_string(line) + ":" + std::to_string(column);
-			return filepath->string() + ":" + std::to_string(line) + ":" + std::to_string(column);
+		std::string as_string() const {
+			if (!filepath) {
+				return std::format("unknown:{}:{}", line, column);
+			}
+			return std::format("{}:{}:{}", filepath->string(), line, column);
 		}
 
 	};

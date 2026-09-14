@@ -18,19 +18,26 @@
 
 #include <fstream>
 
-std::expected<void, uint16_t> prismc::File::load(const std::filesystem::path& path) {
-	std::ifstream file;
-	file.open(path);
+namespace prismc {
 
-	if (!file.is_open()) {
-		if (errno == ENOENT)      return std::unexpected(diag.log(err::ErrFileNotFound, path.string()));
-		else if (errno == EACCES) return std::unexpected(diag.log(err::ErrAccessDenied, path.string()));
-		else                      return std::unexpected(diag.log(err::ErrUnknownFileError, path.string()));
+	std::expected<void, uint16_t> File::load(const std::filesystem::path& path) {
+		this->path = path;
+		std::ifstream file;
+		file.open(path);
+
+		if (!file.is_open()) {
+			if (errno == ENOENT)      return std::unexpected(diag.log(err::ErrFileNotFound, path.string()));
+			else if (errno == EACCES) return std::unexpected(diag.log(err::ErrAccessDenied, path.string()));
+			else                      return std::unexpected(diag.log(err::ErrUnknownFileError, path.string()));
+		}
+
+		std::ostringstream buffer;
+		buffer << file.rdbuf();
+		file.close();
+
+		code = buffer.str();
+
+		return {};
 	}
 
-	std::ostringstream buffer;
-	buffer << file.rdbuf();
-	file.close();
-
-	code = buffer.str();
 }

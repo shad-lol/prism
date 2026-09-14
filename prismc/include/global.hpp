@@ -46,9 +46,12 @@ namespace prismc {
             Err = 0xE000,
             Fatal = 0xF000,
 
-            ErrFileNotFound = 0xE100,
-            ErrAccessDenied = 0xE101,
-            ErrUnknownFileError = 0xE102,
+            ErrFileNotFound = 0xE101,
+            ErrAccessDenied = 0xE102,
+            ErrUnknownFileError = 0xE103,
+
+            SyntaxUnclosedComment = 0xC201,
+            SyntaxUnclosedStringLiteral = 0xC202,
 
         };
     }
@@ -67,6 +70,9 @@ namespace prismc {
         diag.register_code(err::ErrFileNotFound, "failed to find file: [230, 192, 123]${filepath}[/].");
         diag.register_code(err::ErrAccessDenied, "access denied for file: [230, 192, 123]${filepath}[/].");
         diag.register_code(err::ErrUnknownFileError, "could not open file [230, 192, 123]${filepath}[/] due to an unknown error.");
+
+        diag.register_code(err::SyntaxUnclosedComment, "${location}: unclosed comment.");
+        diag.register_code(err::SyntaxUnclosedStringLiteral, "${location}: unclosed string literal.");
 
     }
 

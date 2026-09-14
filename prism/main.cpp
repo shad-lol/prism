@@ -20,23 +20,22 @@ int main() {
 	prismc::register_codes();
 
 	prismc::File file;
-	std::filesystem::path out = "C:/Users/user/Desktop/material/test/out/test/";
-
 	prismc::Lexer lexer;
 //	prismc::Parser parser;
 //	prismc::Backend backend;
 
-	auto res = file.load("C:/Users/user/Desktop/material/test/src/test.prism");
-	if (!res) return res.error();
+	file.set_path("test.prism");
+	file.set_code("entry func test() {\n\treturn 42\n}");
 
-//	auto token_stream = lexer.lex(file);
-//	if (!token_stream) return token_stream.error();
+	auto token_stream = lexer.lex(file);
+	if (!token_stream) return token_stream.error();
+
+	for (auto token : token_stream.value()) {
+		std::cout << token.as_string(file.get_code()) << '\n';
+	}
 
 //	auto ast = parser.parse(token_stream);
 //	if (!ast) return ast.error();
-
-//	auto res = backend.compile(ast, out);
-//	if (!res) return res.error();
 
 	return 0;
 }

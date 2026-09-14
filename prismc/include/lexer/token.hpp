@@ -34,7 +34,6 @@ namespace prismc {
 		IntLiteral,
 		FloatLiteral,
 		StringLiteral,
-		CharLiteral,
 		BoolLiteral,
 
 		Assign,       // =
@@ -77,6 +76,7 @@ namespace prismc {
 		KwLet,
 		KwSet,
 		KwFunc,
+		KwEntry,
 		KwReturn,
 		KwIf,
 		KwElse,
@@ -86,7 +86,7 @@ namespace prismc {
 
 	};
 
-	constexpr std::string_view to_string(TokenType type) {
+	constexpr std::string_view as_string(TokenType type) {
 		switch (type) {
 
 			case TokenType::EoF: return "EoF";
@@ -96,7 +96,6 @@ namespace prismc {
 			case TokenType::IntLiteral: return "IntLiteral";
 			case TokenType::FloatLiteral: return "FloatLiteral";
 			case TokenType::StringLiteral: return "StringLiteral";
-			case TokenType::CharLiteral: return "CharLiteral";
 			case TokenType::BoolLiteral: return "BoolLiteral";
 
 			case TokenType::Assign: return "Assign";
@@ -139,6 +138,7 @@ namespace prismc {
 			case TokenType::KwLet: return "KwLet";
 			case TokenType::KwSet: return "KwSet";
 			case TokenType::KwFunc: return "KwFunc";
+			case TokenType::KwEntry: return "KwEntry";
 			case TokenType::KwReturn: return "KwReturn";
 			case TokenType::KwIf: return "KwIf";
 			case TokenType::KwElse: return "KwElse";
@@ -164,22 +164,28 @@ namespace prismc {
 			return false;
 		}
 
-		std::expected<std::string, uint16_t> to_string() const {
+		std::expected<std::string, uint16_t> as_string() const {
 			File file;
 			auto res = file.load(*location.filepath);
-			if (!res) return std::unexpected<uint16_t>(res.error());
+			if (!res) return std::unexpected(res.error());
 
 			std::string code = file.get_code();
+			std::string_view lexeme(code.data() + location.pos, length);
 
-			return  static_cast<std::string>(prismc::to_string(type)) +
-					" '" + code.substr(location.pos, length) +
-					location.to_string();
+			return  std::format("{} '{}' @ {}",
+	 				prismc::as_string(type),
+		 			lexeme,
+					location.as_string());
 		}
 
-		std::string to_string(const std::string& code) const {
-			return  static_cast<std::string>(prismc::to_string(type)) +
-					" '" + code.substr(location.pos, length) +
-					location.to_string();
+
+		std::string as_string(const std::string_view& code) const {
+			std::string_view lexeme(code.data() + location.pos, length);
+
+			return  std::format("{} '{}' @ {}",
+					prismc::as_string(type),
+					lexeme,
+					location.as_string());
 		}
 
 	};
