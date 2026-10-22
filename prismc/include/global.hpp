@@ -82,7 +82,7 @@ namespace prismc {
 
     extern PRISMC_API Diagnostics diag;
 
-    inline void register_codes() {
+    inline int register_codes() {
 
         diag.register_code(err::Success, "success");
         diag.register_code(err::Text, "text");
@@ -121,6 +121,8 @@ namespace prismc {
         diag.register_code(err::ErrOutputFileError, "failed to create or open the output object file.");
 
         diag.register_code(err::ErrLinkError, "link error.");
+
+        return 0;
 
     }
 

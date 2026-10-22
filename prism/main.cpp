@@ -27,7 +27,7 @@ int main() {
 
 	prism::Compiler compiler;
 	compiler.compile(
-		{ "../../../prism/examples/test.prism" }
+		{ "../../../prism/pg/pg.prism" }
 	);
 
 	return 0;

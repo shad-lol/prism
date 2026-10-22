@@ -38,6 +38,8 @@ inline void verify(const E& err, F&& handler = F{}) {
 class Diagnostics {
 
 public:
+    bool silent = false;
+
     Diagnostics() {
         registry[0xF001] = "[100, 181, 246][Diagnostics][/] Unknown code: [100, 181, 246]0x${code}[/].";
         registry[0xF002] = "[100, 181, 246][Diagnostics][/] Format error for code [100, 181, 246]0x${code}[/]: Wrong argument count.";
@@ -113,14 +115,16 @@ public:
         uint8_t severity = hex_code >> 12;
 
         if (severity == 1) {
-            std::println(std::cout, "{}", message);
+            if (!silent)
+                std::println(std::cout, "{}", message);
             return 0x1000;
         }
 
         std::string prefix = generate_prefix(severity, hex_code);
-
         std::ostream& os = (severity == 0xE || severity == 0xF) ? std::cerr : std::cout;
-        std::println(os, "{}{}", prefix, message);
+
+        if (!silent)
+            std::println(os, "{}{}", prefix, message);
 
         if (severity == 0xF)
             std::exit(hex_code);

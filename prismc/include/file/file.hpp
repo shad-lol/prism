@@ -30,8 +30,6 @@ namespace prismc {
 		std::filesystem::path path;
 		std::string code;
 
-		File() = default;
-
 		uint16_t load(const std::filesystem::path& path);
 
 	};

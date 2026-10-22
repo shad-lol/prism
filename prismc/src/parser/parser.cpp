@@ -75,19 +75,6 @@ namespace prismc {
 		Signature signature = func.signature;
 		signature.identifier = curr().lexeme(code);
 
-		pos++;
-		if (curr().is(TokenType::Dot)) {
-			Struct& struct_ = ast.structs[ast.find(curr().lexeme(code))];
-
-			signature.identifier += ".";
-			pos++;
-
-			if (!curr().is(TokenType::Identifier))
-				return diag.log(err::SyntaxExpectedIdentifier, curr().location.as_string());
-
-			signature.identifier += curr().lexeme(code)
-		}
-
 		if (ast.exists(signature))
 			return diag.log(err::SyntaxRedifinition, curr().location.as_string(), "function", signature.identifier);
 

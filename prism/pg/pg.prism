@@ -1,0 +1,7 @@
+func sum(of: Int32, and: Int32) -> Int32 {
+	return @i32_add(of, and)
+}
+
+entry func main() {
+	return sum(of: 22, and: 20)
+}
