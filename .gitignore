@@ -1,5 +1,6 @@
 .vs/
 dist/
+out/
 CMakeLists.txt.user
 
 CMakeUserPresets.json
