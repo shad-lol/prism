@@ -20,6 +20,7 @@
 
 #include "token.hpp"
 #include <file/file.hpp>
+#include <lexer/unicode_char.hpp>
 
 #include <string>
 #include <vector>
@@ -29,13 +30,23 @@ namespace prismc {
 	class PRISMC_API Lexer {
 
 	public:
-		Lexer() = default;
+		std::expected<std::vector<Token>, uint16_t> tokenize(const File& file);
 
-		std::expected<std::vector<Token>, uint16_t> lex(const File& file);
+	private:
+		Token tokenize_identifier_or_keyword();
+		Token tokenize_operator();
+		std::expected<Token, bool> tokenize_string();
+		Token tokenize_number();
 
-		Token lex_identifier_or_keyword();
-		std::expected<Token, bool> lex_string();
-		Token lex_number();
+		std::string_view code;
+		SourceLocation location;
+
+		[[nodiscard]] UnicodeChar peek_unicode() const;
+		[[nodiscard]] bool is_operator_char(uint32_t cp) const;
+		[[nodiscard]] bool is_identifier_start_char(uint32_t cp) const;
+		[[nodiscard]] bool is_identifier_continue_char(uint32_t cp) const;
+
+		bool can_insert_newline(const std::vector<Token>& tokens) const;
 
 		bool skip();
 
@@ -45,24 +56,21 @@ namespace prismc {
 
 		char peek() const;
 		char next() const;
-
 		char advance();
-
-	private:
-		std::string_view code;
-		SourceLocation location;
 
 		inline static const std::unordered_map<std::string_view, TokenType> keywords = {
 			{"let", TokenType::KwLet},
-			{"set", TokenType::KwSet},
+			{"var", TokenType::KwVar},
 			{"func", TokenType::KwFunc},
+			{"struct", TokenType::KwStruct},
 			{"entry", TokenType::KwEntry},
 			{"return", TokenType::KwReturn},
 			{"if", TokenType::KwIf},
 			{"else", TokenType::KwElse},
 			{"while", TokenType::KwWhile},
-			{"struct", TokenType::KwStruct},
 			{"import", TokenType::KwImport},
+			{"public", TokenType::KwPublic},
+			{"private", TokenType::KwPrivate},
 			{"true", TokenType::BoolLiteral},
 			{"false", TokenType::BoolLiteral}
 		};

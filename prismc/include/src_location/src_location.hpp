@@ -23,22 +23,19 @@ namespace prismc {
 
 	struct SourceLocation {
 
-		const std::filesystem::path* filepath;
+		const std::filesystem::path* path;
 		uint32_t pos = 0;
 		uint16_t line = 1;
 		uint16_t column = 1;
 
 		SourceLocation() = default;
 
-		SourceLocation(const std::filesystem::path* filepath, size_t pos, size_t line, size_t column)
-			: filepath(filepath), pos(pos), line(line), column(column) {
-		}
+		SourceLocation(const std::filesystem::path* path, size_t pos, size_t line, size_t column)
+			: path(path), pos(pos), line(line), column(column) {}
 
 		std::string as_string() const {
-			if (!filepath) {
-				return std::format("unknown:{}:{}", line, column);
-			}
-			return std::format("{}:{}:{}", filepath->string(), line, column);
+			if (!path) return std::format("unknown:{}:{}", line, column);
+			return std::format("{}:{}:{}", path->string(), line, column);
 		}
 
 	};

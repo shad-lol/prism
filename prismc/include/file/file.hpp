@@ -27,18 +27,12 @@ namespace prismc {
 	class PRISMC_API File {
 
 	public:
-		File() = default;
-
-		std::expected<void, uint16_t> load(const std::filesystem::path& path);
-
-		[[nodiscard]] constexpr const std::filesystem::path& get_path() const noexcept { return path; }
-		[[nodiscard]] constexpr const std::string& get_code() const noexcept { return code; }
-		constexpr void set_path(const std::filesystem::path& path) noexcept { this->path = path; }
-		constexpr void set_code(const std::string& code) noexcept { this->code = code; }
-
-	private:
 		std::filesystem::path path;
 		std::string code;
+
+		File() = default;
+
+		uint16_t load(const std::filesystem::path& path);
 
 	};
 

@@ -38,33 +38,11 @@ namespace prismc {
 		StringLiteral,
 		BoolLiteral,
 
+		Operator,
+
 		Assign,       // =
-		Plus,         // +
-		Minus,        // -
-		Asterisk,     // *
-		Slash,        // /
-		Percent,      // %
-
-		Equal,        // ==
-		NotEqual,     // !=
-		LessThan,     // <
-		LessEqual,    // <=
-		GreaterThan,  // >
-		GreaterEqual, // >=
-
-		Amp,          // &
-		Pipe,         // |
-		Caret,        // ^
-		Tilde,        // ~
-		LeftShift,    // <<
-		RightShift,   // >>
-
-		AmpAmp,       // &&
-		PipePipe,     // ||
-		Exclamation,  // !
-
 		Colon,        // :
-		Semicolon,    // ;
+		NewLine,      // ⏎ (\n)
 		Comma,        // ,
 		Dot,          // .
 
@@ -76,15 +54,17 @@ namespace prismc {
 		CloseBracket, // ]
 
 		KwLet,
-		KwSet,
+		KwVar,
 		KwFunc,
+		KwStruct,
 		KwEntry,
 		KwReturn,
 		KwIf,
 		KwElse,
 		KwWhile,
-		KwStruct,
-		KwImport
+		KwImport,
+		KwPublic,
+		KwPrivate
 
 	};
 
@@ -96,10 +76,14 @@ namespace prismc {
 		uint8_t length;
 		SourceLocation location;
 
-		bool is_one_of(std::initializer_list<TokenType> types) const;
+		[[nodiscard]] bool is(TokenType type) const;
+		[[nodiscard]] bool is_one_of(std::initializer_list<TokenType> types) const;
 
-		std::expected<std::string, uint16_t> as_string() const;
-		std::string as_string(std::string_view code) const;
+		[[nodiscard]] std::expected<std::string, uint16_t> as_string() const;
+		[[nodiscard]] std::string as_string(std::string_view code) const;
+
+		[[nodiscard]] std::expected<std::string, uint16_t> lexeme() const;
+		[[nodiscard]] std::string lexeme(std::string_view code) const;
 
 	};
 

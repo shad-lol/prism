@@ -30,33 +30,11 @@ namespace prismc {
 			case TokenType::StringLiteral: return "StringLiteral";
 			case TokenType::BoolLiteral: return "BoolLiteral";
 
+			case TokenType::Operator: return "Operator";
+
 			case TokenType::Assign: return "Assign";
-			case TokenType::Plus: return "Plus";
-			case TokenType::Minus: return "Minus";
-			case TokenType::Asterisk: return "Asterisk";
-			case TokenType::Slash: return "Slash";
-			case TokenType::Percent: return "Percent";
-
-			case TokenType::Equal: return "Equal";
-			case TokenType::NotEqual: return "NotEqual";
-			case TokenType::LessThan: return "LessThan";
-			case TokenType::LessEqual: return "LessEqual";
-			case TokenType::GreaterThan: return "GreaterThan";
-			case TokenType::GreaterEqual: return "GreaterEqual";
-
-			case TokenType::Amp: return "Amp";
-			case TokenType::Pipe: return "Pipe";
-			case TokenType::Caret: return "Caret";
-			case TokenType::Tilde: return "Tilde";
-			case TokenType::LeftShift: return "LeftShift";
-			case TokenType::RightShift: return "RightShift";
-
-			case TokenType::AmpAmp: return "AmpAmp";
-			case TokenType::PipePipe: return "PipePipe";
-			case TokenType::Exclamation: return "Exclamation";
-
 			case TokenType::Colon: return "Colon";
-			case TokenType::Semicolon: return "Semicolon";
+			case TokenType::NewLine: return "NewLine";
 			case TokenType::Comma: return "Comma";
 			case TokenType::Dot: return "Dot";
 
@@ -68,49 +46,83 @@ namespace prismc {
 			case TokenType::CloseBracket: return "CloseBracket";
 
 			case TokenType::KwLet: return "KwLet";
-			case TokenType::KwSet: return "KwSet";
+			case TokenType::KwVar: return "KwVar";
 			case TokenType::KwFunc: return "KwFunc";
+			case TokenType::KwStruct: return "KwStruct";
 			case TokenType::KwEntry: return "KwEntry";
 			case TokenType::KwReturn: return "KwReturn";
 			case TokenType::KwIf: return "KwIf";
 			case TokenType::KwElse: return "KwElse";
 			case TokenType::KwWhile: return "KwWhile";
-			case TokenType::KwStruct: return "KwStruct";
 			case TokenType::KwImport: return "KwImport";
+			case TokenType::KwPublic: return "KwPublic";
+			case TokenType::KwPrivate: return "KwPrivate";
 
 		}
 
 		return "Unknown";
 	}
 
+	bool Token::is(TokenType type) const {
+		if (this->type == type) return true;
+		return false;
+	}
+
 	bool Token::is_one_of(std::initializer_list<TokenType> types) const {
-		for (auto t : types) {
-			if (type == t) return true;
+		for (auto type : types) {
+			if (this->type == type) return true;
 		}
 		return false;
 	}
 
 	std::expected<std::string, uint16_t> Token::as_string() const {
 		File file;
-		auto res = file.load(*location.filepath);
-		if (!res) return std::unexpected(res.error());
+		uint16_t res = file.load(*location.path);
+		if (res != err::Success) return std::unexpected(res);
 
-		std::string code = file.get_code();
+		std::string code = file.code;
 		std::string_view lexeme(code.data() + location.pos, length);
 
-		return  std::format("{} '{}' @ {}",
+		if (type == TokenType::NewLine)
+			lexeme = "⏎";
+
+		return  std::format("{}: {} '{}'",
+				location.as_string(),
 				prismc::as_string(type),
-				lexeme,
-				location.as_string());
+				lexeme);
 	}
 
 	std::string Token::as_string(std::string_view code) const {
 		std::string_view lexeme(code.data() + location.pos, length);
 
-		return  std::format("{} '{}' @ {}",
+		if (type == TokenType::NewLine) {
+			#ifdef _WIN32
+				if (GetConsoleOutputCP() == 65001)
+					lexeme = "⏎";
+
+				else lexeme = "\\n";
+			#else
+				lexemme = "⏎";
+			#endif
+		}
+
+		return  std::format("{}: {} '{}'",
+				location.as_string(),
 				prismc::as_string(type),
-				lexeme,
-				location.as_string());
+				lexeme);
+	}
+
+	std::expected<std::string, uint16_t> Token::lexeme() const {
+		File file;
+		uint16_t res = file.load(*location.path);
+		if (res != err::Success) return std::unexpected(res);
+		std::string code = file.code;
+
+		return std::string(code.data() + location.pos, length);
+	}
+
+	std::string Token::lexeme(std::string_view code) const {
+		return std::string(code.data() + location.pos, length);
 	}
 
 }

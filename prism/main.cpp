@@ -14,28 +14,21 @@
  *   limitations under the License.
  */
 
-#include <prismc>
-	
+#include <compiler/compiler.hpp>
+
+#ifdef _WIN32
+#include <windows.h>
+#endif
+
 int main() {
-	prismc::register_codes();
+	#ifdef _WIN32
+		SetConsoleOutputCP(CP_UTF8);
+	#endif
 
-	prismc::File file;
-	prismc::Lexer lexer;
-//	prismc::Parser parser;
-//	prismc::Backend backend;
-
-	file.set_path("test.prism");
-	file.set_code("entry func test() {\n\treturn 42\n}");
-
-	auto token_stream = lexer.lex(file);
-	if (!token_stream) return token_stream.error();
-
-	for (auto token : token_stream.value()) {
-		std::cout << token.as_string(file.get_code()) << '\n';
-	}
-
-//	auto ast = parser.parse(token_stream);
-//	if (!ast) return ast.error();
+	prism::Compiler compiler;
+	compiler.compile(
+		{ "../../../prism/examples/test.prism" }
+	);
 
 	return 0;
 }

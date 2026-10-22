@@ -16,9 +16,27 @@
 
 set(SOURCES
     main.cpp
+
+    src/compiler/compiler.cpp
 )
 
 add_executable(prism ${SOURCES})
 
-target_include_directories(prism PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/../dist/prism/include")
+target_include_directories(prism PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
+target_include_directories(prism PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../dist/prism/include)
 target_link_libraries(prism PRIVATE prismc)
+
+target_include_directories(prismc SYSTEM PRIVATE 
+    ${LLVM_INCLUDE_DIRS}
+)
+
+llvm_map_components_to_libnames(LLVM_LIBS 
+    core
+    support
+)
+
+if(WIN32)
+    set(LLVM_LIBS ${LLVM_LIBS} psapi shell32 ole32 uuid version dbghelp)
+endif()
+
+target_link_libraries(prism PRIVATE prismc ${LLVM_LIBS})

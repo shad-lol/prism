@@ -14,5 +14,8 @@
  *   limitations under the License.
  */
 
-#include <file/file.hpp>
 #include <lexer/lexer.hpp>
+#include <parser/parser.hpp>
+#include <ir_generator/ir_generator.hpp>
+#include <obj_compiler/obj_compiler.hpp>
+#include <linker/linker.hpp>

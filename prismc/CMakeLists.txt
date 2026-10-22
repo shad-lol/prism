@@ -20,25 +20,27 @@ set(SOURCES
     src/file/file.cpp
     src/lexer/lexer.cpp
     src/lexer/token.cpp
+    src/parser/parser.cpp
+    src/parser/ast.cpp
+    src/ir_generator/ir_generator.cpp
+    src/obj_compiler/obj_compiler.cpp
+    src/linker/linker.cpp
 )
 
 add_library(prismc SHARED ${SOURCES})
 
-target_include_directories(prismc PRIVATE 
-    ${LLVM_INCLUDE_DIRS}
-    ${CMAKE_CURRENT_SOURCE_DIR}/include
-)
+target_include_directories(prismc PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
  
 target_compile_definitions(prismc PRIVATE ${LLVM_DEFINITIONS})
 target_compile_definitions(prismc PRIVATE PRISMC_EXPORTS)
+target_compile_definitions(prismc PRIVATE -DLLVM_BUILD_STATIC)
 
-llvm_map_components_to_libnames(LLVM_LIBS 
-    core
-    support
+set(LLVM_LIBS 
+    ${LLVM_AVAILABLE_LIBS}
 )
 
 if(WIN32)
-    set(LLVM_LIBS ${LLVM_LIBS} psapi shell32 ole32 uuid version dbghelp)
+    set(LLVM_LIBS ${LLVM_LIBS} psapi shell32 ole32 uuid version dbghelp shlwapi)
 endif()
 
 target_link_libraries(prismc PRIVATE ${LLVM_LIBS})

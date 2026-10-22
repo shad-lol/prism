@@ -21,9 +21,18 @@ set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+add_compile_definitions(NOMINMAX)
+
+if(MSVC AND CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+    add_compile_definitions(
+        $<$<CONFIG:Debug>:_ITERATOR_DEBUG_LEVEL=0>
+        $<$<CONFIG:Debug>:_HAS_ITERATOR_DEBUGGING=0>
+    )
+endif()
+
 find_package(LLVM REQUIRED CONFIG)
 list(APPEND CMAKE_MODULE_PATH "${LLVM_CMAKE_DIR}")
-include(LLVMConfig)
+include_directories(SYSTEM ${LLVM_INCLUDE_DIRS})
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/dist/prism/bin")
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/dist/prism/lib")

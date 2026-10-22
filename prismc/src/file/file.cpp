@@ -20,24 +20,22 @@
 
 namespace prismc {
 
-	std::expected<void, uint16_t> File::load(const std::filesystem::path& path) {
+	uint16_t File::load(const std::filesystem::path& path) {
 		this->path = path;
 		std::ifstream file;
 		file.open(path);
 
 		if (!file.is_open()) {
-			if (errno == ENOENT)      return std::unexpected(diag.log(err::ErrFileNotFound, path.string()));
-			else if (errno == EACCES) return std::unexpected(diag.log(err::ErrAccessDenied, path.string()));
-			else                      return std::unexpected(diag.log(err::ErrUnknownFileError, path.string()));
+			if (errno == ENOENT) return diag.log(err::FatalFileNotFound, path.string());
+			else if (errno == EACCES) return diag.log(err::ErrAccessDenied, path.string());
+			else return diag.log(err::ErrUnknownFileError, path.string());
 		}
 
 		std::ostringstream buffer;
 		buffer << file.rdbuf();
-		file.close();
-
 		code = buffer.str();
 
-		return {};
+		return err::Success;
 	}
 
 }
